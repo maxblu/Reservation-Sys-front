@@ -83,7 +83,16 @@ const useStyles = makeStyles((theme) => ({
         padding: theme.spacing(6),
         paddingRight: 0,
       },
+   
     },
+    buttonAction:{
+        color:"white",
+        backgroundColor: ' rgb(173, 173, 173)',
+        "&:hover":{
+          backgroundColor:"red"
+        }
+  
+      }
   }));
 
 
@@ -229,7 +238,7 @@ const Layout = (props) => {
                     </Grid>
                     <Hidden xsDown>
                         <Grid container item xs={3} justify='flex-end' >
-                            <Button>{currentAction}</Button>
+                            <Button className={classes.buttonAction}>{currentAction}</Button>
                         </Grid>
 
                     </Hidden>

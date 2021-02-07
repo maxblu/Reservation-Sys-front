@@ -9,6 +9,16 @@
   background-color: rgb(223, 223, 223);
 }
 
+.buttonAction{
+  color:white;
+  background-color: rgb(173, 173, 173),
+
+}  
+.buttonAction:hover{
+    background-color: red;
+}
+
+
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
