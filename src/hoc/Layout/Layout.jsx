@@ -108,7 +108,7 @@ const Layout = (props) => {
 
     const classes = useStyles();
     const history = useHistory()
-    const [currentAction, setCurrentAction] = useState("Create Reservation");
+    const [currentAction, setCurrentAction] = useState("Create Reservations");
     // const [currentPath, setcurrentPath] = useState('/');
     
     useEffect(() => {
@@ -135,30 +135,35 @@ const Layout = (props) => {
 
 
         // setcurrentPath(history.location.pathname)
-    }, [history.location.pathname]);
+    }, []);
     
 
-    const handleButton = ()=>{
-
-        switch (currentAction ) {
-            case "/reservations":
-                history.push('/reservations/create')
+    const handleChangeViewButton = ()=>{
+       
+        switch (currentAction) {
+            case "Create Reservations":
+                history.push('/reservations/create');
+                setCurrentAction("Reservation List");     
+                console.log("entre");
                 break;
-            case "/contacs":
-                history.push('/contacts/create')
-                break;
-            case "/reservations/create":
-                history.push('/reservations')
-                break;
-            case "/contacs/create":
-                history.push('/contacts')
+                case "Create Contact":
+                    history.push('/contacts/create');
+                    setCurrentAction("Contacts List");
+                    break;
+                case "Reservation List":
+                    history.push('/reservations');
+                    setCurrentAction("Create Reservations")
+                    break;
+            case "Contacts List":
+                history.push('/contacts');
+                setCurrentAction("Create Contact");
                 break;
             default:
+                console.log("Default");
                 break;
         }
 
     }
-
 
 
     return (
@@ -198,7 +203,7 @@ const Layout = (props) => {
                     </Hidden>
                <Hidden smUp>                   
                     <Grid item xs={6} container justify='flex-end'    >
-                        <Button className={classes.button} onClick={handleButton} >
+                        <Button className={classes.button} onClick={handleChangeViewButton} >
                                 <Typography variant="caption">
                                     {currentAction}
                                     
@@ -216,7 +221,7 @@ const Layout = (props) => {
             
         </Paper>
         
-        <Grid container item xs sm md lg  justify='center' alignContent='center' alignItems='center'>
+        <Grid container item   justify='center' alignContent='center' alignItems='center'>
             <Paper className={classes.subHeader} elevation={0}>
                 <Grid container justify='center' alignContent='center' alignItems='center' className={classes.contentSubHeader} >
                    
@@ -236,9 +241,9 @@ const Layout = (props) => {
 
 
                     </Grid>
-                    <Hidden xsDown>
+                    <Hidden xsDown >
                         <Grid container item xs={3} justify='flex-end' >
-                            <Button className={classes.buttonAction}>{currentAction}</Button>
+                            <Button className={classes.buttonAction} onClick={(e)=>handleChangeViewButton(e)} >{currentAction}</Button>
                         </Grid>
 
                     </Hidden>
