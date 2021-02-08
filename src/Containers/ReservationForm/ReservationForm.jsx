@@ -1,7 +1,9 @@
 import React, {useState,useEffect} from 'react';
 
 import {  Button, FormControl, Grid, IconButton, InputLabel, ListItemText, makeStyles, MenuItem, Paper, Select, TextField } from '@material-ui/core';
-import { Today } from '@material-ui/icons';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
+
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
@@ -11,6 +13,13 @@ import * as Yup from 'yup';
 
 import axios from '../../axiosInstance';
 import Spinner from '../../Components/Spinner/Spinner';
+
+
+
+function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+  }
+
 
 const useStyles = makeStyles((theme)=>({
 
@@ -74,12 +83,18 @@ const ReservationForm = (props) => {
     description:"",
     title:"",
     block:false,
+    errors:false,
     loading:false,
 });
 const [allContactTypes, setAllContactTypes] = useState([]);
 const [loading, setLoading] = useState(false);
+const [open, setOpen] = React.useState(false);
 
 const classes = useStyles();
+
+const handleOpenSnack = () => {
+    setOpen(true);
+  };
 
 const ExampleCustomInput = ({ value, onClick,tipo,block }) => (
     <TextField label={tipo}  variant='outlined' value={value} disabled={block} onClick={onClick} >
@@ -131,12 +146,12 @@ useEffect(() => {
             axios.post('/Reservation',reservation)
                     .then(resp=>{
                        console.log(props);
-
-                       setInputs({...inputs,loading:false})
-                        props.history.push('/reservations')
+                      
+                       setInputs({...inputs,loading:false,errors:false})
+                        setOpen(true);
                     }).catch((e)=>{
-                       setInputs({...inputs,loading:false})
-
+                       setInputs({...inputs,loading:false, errors:true});
+                        setOpen(true);
                         console.log("Check server validation errors");
                     });
             
@@ -157,9 +172,10 @@ useEffect(() => {
         console.log(e);
 
         if(e.target.name==="contactName"){
-                setInputs({...inputs,loading:true,block:false});
+                setInputs({...inputs, contactName:e.target.value,loading:true,block:false});
                 axios.get(`/Contact/lookup?name=${e.target.value}`)
                     .then(resp=>{
+
 
                         let current=null
                         allContactTypes.forEach(el=>{
@@ -170,7 +186,7 @@ useEffect(() => {
 
 
                         
-                        console.log(resp);
+                        
                             setInputs({
                                 ...inputs,
                                 contactId:resp.data[0].id,
@@ -183,13 +199,16 @@ useEffect(() => {
                             })
                     })
                     .catch(e=>{
-                        console.log(e);
+                        console.log("asfsdfgasgagawgwg");
+                        
                     })
 
         }
+        else{
 
+            setInputs({...inputs,[e.target.name]:e.target.value});
+        }
 
-        setInputs({...inputs,[e.target.name]:e.target.value});
 
 
     }
@@ -362,6 +381,14 @@ useEffect(() => {
 
             </CKEditor>
                {/* </Paper> */}
+           </Grid>
+           <Grid item xs={10} md={8}>
+           <Snackbar open={open}  autoHideDuration={5000} >
+                {!inputs.errors?<Alert  severity="success">
+                    Reservation saved
+                </Alert>:<Alert severity='error'>Some errors</Alert>}
+            </Snackbar>
+
            </Grid>
            <Grid item container justify="flex-end" alignContent='space-around' xs={12}>
                 <Button className={classes.buttomSend} onClick={handleSave} >Send</Button>
