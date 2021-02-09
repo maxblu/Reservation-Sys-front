@@ -266,7 +266,7 @@ const Reservations = (props) => {
             reservations.map((reser, index) => {
               return (
                 <Grid
-                  key={reser.title}
+                  key={reser.id}
                   item
                   container
                   justify="center"
@@ -333,7 +333,7 @@ const Reservations = (props) => {
           </IconButton>
           <ListItemText primary={pageData.pageNumber} />
           <IconButton
-            disabled={pageData.pageNumber > pageData.totalPages}
+            disabled={pageData.pageNumber >= pageData.totalPages}
             onClick={(e) => {
               handlePagination(e, true);
             }}
