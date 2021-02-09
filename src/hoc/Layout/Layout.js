@@ -58,7 +58,7 @@ const useStyles = makeStyles((theme) => ({
     //  textAlign:"center"
   },
   contentMovil: {
-    width: "100%",
+    width: "95%",
   },
   card: {
     height: "100%",
