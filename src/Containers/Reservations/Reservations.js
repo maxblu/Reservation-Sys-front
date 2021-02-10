@@ -222,6 +222,12 @@ const Reservations = (props) => {
     sendPutUpdate(auxR, index);
   };
 
+  const handlerEdit = (e, index) => {
+    props.history.push("/Reservation/edit", {
+      reservation: reservations[index],
+    });
+  };
+
   console.log("Re render");
   return (
     <Grid container justify="center">
@@ -266,7 +272,7 @@ const Reservations = (props) => {
             reservations.map((reser, index) => {
               return (
                 <Grid
-                  key={reser.title}
+                  key={reser.id}
                   item
                   container
                   justify="center"
@@ -314,7 +320,12 @@ const Reservations = (props) => {
                       </IconButton>
                     </Grid>
                     <Grid item xs={2} sm={4} container justify="flex-end">
-                      <Button className={classes.buttonAction}>Editar</Button>
+                      <Button
+                        className={classes.buttonAction}
+                        onClick={(e) => handlerEdit(e, index)}
+                      >
+                        Editar
+                      </Button>
                     </Grid>
                   </ListItem>
                 </Grid>
@@ -333,7 +344,7 @@ const Reservations = (props) => {
           </IconButton>
           <ListItemText primary={pageData.pageNumber} />
           <IconButton
-            disabled={pageData.pageNumber > pageData.totalPages}
+            disabled={pageData.pageNumber >= pageData.totalPages}
             onClick={(e) => {
               handlePagination(e, true);
             }}
