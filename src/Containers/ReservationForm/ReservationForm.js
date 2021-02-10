@@ -140,7 +140,7 @@ const ReservationForm = (props) => {
       });
   }, []);
 
-  useEffect(() => {}, [loading]);
+  // useEffect(() => {}, [loading]);
 
   console.log(inputs);
 
