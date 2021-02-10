@@ -24,6 +24,7 @@ import * as Yup from "yup";
 
 import axios from "../../axiosInstance";
 import Spinner from "../../Components/Spinner/Spinner";
+import { format } from "date-fns";
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -285,8 +286,8 @@ const ReservationForm = (props) => {
       contactName: "",
       contactType: "",
       phone: "",
-      birthday: new Date(),
-      date: new Date(),
+      birthday: "",
+      date: "",
       description: "",
     },
     onSubmit: (values) => {
@@ -343,7 +344,10 @@ const ReservationForm = (props) => {
     validateOnChange: true,
     isInitialValid: true,
   });
-  console.log(formick);
+  console.log(formick.values.birthday);
+  console.log(new Date(formick.values.birthday));
+  if (formick.values.birthday)
+    console.log(format(new Date(formick.values.birthday), "yyyy-MM-dd"));
   return (
     <Grid container justify="center">
       <form onSubmit={() => formick.handleSubmit} className={classes.form}>
@@ -443,7 +447,11 @@ const ReservationForm = (props) => {
                   formick.setTouched({ ...formick.touched, birthday: true });
                 }}
                 onChange={formick.handleChange}
-                value={formick.values.birthday}
+                value={
+                  !inputs.block
+                    ? formick.values.birthday
+                    : format(new Date(formick.values.birthday), "yyyy-MM-dd")
+                }
                 InputLabelProps={{
                   shrink: true,
                 }}

@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import axios from "../../axiosInstance";
 import {
+  Button,
   FormControl,
   Grid,
   InputLabel,
   makeStyles,
   Menu,
+  MenuItem,
   Select,
   TextField,
 } from "@material-ui/core";
@@ -13,6 +15,7 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { format } from "date-fns";
 
 const useStyles = makeStyles((theme) => ({
   gridControls: {
@@ -52,19 +55,41 @@ const ReservationEdit = (props) => {
 
   useEffect(() => {
     const data = props.history.location.state.reservation;
-    formick.setValues({
-      ...formick.values,
-      contactName: data.contact.name,
-      contactTypeId: data.contact.typeId,
-      phone: data.contact.phone,
-      birthday: data.contact.birthDate,
+    console.log(data);
+    setReservation({
+      reservationId: data.id,
+      contactId: data.contact.id,
+      date: data.date,
+      title: data.title,
+      description: data.description,
+      isFavorite: data.isFavorite,
+      ranking: data.ranking,
+      contact: data.contact,
     });
-    setReservation(props.history.location.state.reservation);
     axios
       .get("/contactType")
       .then((resp) => {
         console.log(resp);
         setAllContactTypes(resp.data);
+        let current = null;
+        resp.data.forEach((el) => {
+          if (el.id === data.contact.typeId) {
+            current = el.name;
+          }
+        });
+        formick.setValues({
+          ...formick.values,
+          contactName: data.contact.name,
+          contactTypeId: data.contact.typeId,
+          phone: data.contact.phone,
+          birthday: data.contact.birthDate,
+          contactId: data.contact.id,
+          date: data.date,
+          description: data.description,
+          reservationId: data.id,
+          title: data.title,
+          contactType: current,
+        });
       })
       .catch((e) => {
         console.log(e);
@@ -72,7 +97,7 @@ const ReservationEdit = (props) => {
   }, []);
 
   const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
-  console.log(reservation);
+  console.log(allContactTypes);
   const validationSchema = Yup.object({
     contactName: Yup.string().max(10, "10 characters max").required("Required"),
     contactType: Yup.string().required("Required"),
@@ -98,7 +123,7 @@ const ReservationEdit = (props) => {
       title: " ",
       contactTypeId: " ",
       loading: false,
-      block: false,
+      block: true,
     },
     validationSchema: validationSchema,
     onReset: {
@@ -112,70 +137,85 @@ const ReservationEdit = (props) => {
       contactTypeId: " ",
       loading: false,
     },
+
     onSubmit: (values) => {
-      // let reservation = null;
-      // if (inputs.block) {
-      //   reservation = {
-      //     title: formick.values.title,
-      //     description: formick.values.description,
-      //     contactId: inputs.contactId,
-      //     date: formick.values.date,
-      //     creationDate: new Date(),
-      //   };
-      //   setInputs({ ...inputs, loading: true });
-      //   saveReservation(reservation);
-      // } else {
-      //   let current = null;
-      //   allContactTypes.forEach((el) => {
-      //     if (el.name === formick.values.contactType) {
-      //       current = el.id;
-      //     }
-      //   });
-      //   const contact = {
-      //     name: formick.values.contactName,
-      //     phone: formick.values.phone,
-      //     typeId: current,
-      //     birthDate: formick.values.birthday,
-      //   };
-      //   console.log(contact);
-      //   setInputs({ ...inputs, loading: true });
-      //   axios
-      //     .post("/Contact", contact)
-      //     .then((resp) => {
-      //       const reservation = {
-      //         title: formick.values.title,
-      //         description: formick.values.description,
-      //         date: formick.values.date,
-      //         creationDate: new Date(),
-      //         contactId: resp.data.id,
-      //       };
-      //       saveReservation(reservation);
-      //     })
-      //     .catch((err) => {
-      //       console.log(err.response.data);
-      //       // console.log(resp);
-      //     });
-      // }
+      let reservationUpd = null;
+      reservationUpd = {
+        id: reservation.reservationId,
+        title: formick.values.title,
+        description: formick.values.description,
+        date: formick.values.date,
+        creationDate: new Date().toISOString(),
+        isFavorite: reservation.isFavorite,
+        ranking: reservation.ranking,
+      };
+
+      if (formick.values.block) {
+        reservationUpd = {
+          ...reservationUpd,
+          contactId: reservation.contactId,
+        };
+
+        updateReservation(reservationUpd);
+      } else {
+        let current = null;
+        allContactTypes.forEach((el) => {
+          if (el.name === formick.values.contactType) {
+            current = el.id;
+          }
+        });
+        const contact = {
+          name: formick.values.contactName,
+          phone: formick.values.phone,
+          typeId: current,
+          birthDate: formick.values.birthday,
+        };
+        console.log(contact);
+        formick.setValues({ ...formick.values, loading: true });
+        axios
+          .post("/Contact", contact)
+          .then((resp) => {
+            reservationUpd = {
+              ...reservationUpd,
+              contactId: resp.data.id,
+            };
+            updateReservation(reservationUpd);
+          })
+          .catch((err) => {
+            console.log(err.response.data);
+            console.log("Check server validation errors");
+
+            // console.log(resp);
+          });
+      }
     },
-    validateOnChange: true,
-    isInitialValid: true,
+
+    // validateOnChange: true,
+    // isInitialValid: true,
   });
 
-  // const saveReservation = (reservation) => {
-  //   axios
-  //     .post("/Reservation", reservation)
-  //     .then((resp) => {
-  //       setInputs({ ...inputs, loading: false, errors: false });
-  //       setOpen(true);
-  //       props.history.push("/Reservations");
-  //     })
-  //     .catch((e) => {
-  //       setInputs({ ...inputs, loading: false, errors: true });
-  //       setOpen(true);
+  const updateReservation = (reservationUpd) => {
+    formick.setValues({ ...formick.values, loading: true });
+    console.log(reservationUpd);
+    console.log(reservation.reservationId);
+    axios
+      .put(`/Reservation/${reservation.reservationId}`, reservationUpd)
+      .then((resp) => {
+        formick.setValues({ ...formick.values, loading: false });
 
-  //       // console.log("Check server validation errors");
-  //     });
-  // };
+        // setInputs({ ...inputs, loading: false, errors: false });
+        // setOpen(true);
+        props.history.push("/Reservations");
+      })
+      .catch((e) => {
+        formick.setValues({ ...formick.values, loading: false });
+        console.log(e.response);
+        // setInputs({ ...inputs, loading: false, errors: true });
+        // setOpen(true);
+
+        console.log("Check server validation errors at reservation update");
+      });
+  };
 
   const handleChangeContactName = (e) => {
     // formick.setValues({...formick.values,})
@@ -212,10 +252,12 @@ const ReservationEdit = (props) => {
       });
   };
 
+  if (formick.values.birthday)
+    console.log(format(new Date(formick.values.birthday), "yyyy-MM-dd"));
   return (
-    <Grid justify="center">
+    <Grid container justify="center">
       {reservation && (
-        <form className={classes.form}>
+        <form className={classes.form} onSubmit={formick.handleSubmit}>
           <Grid item xs={12} sm={12} container justify="space-evenly">
             <Grid item xs={12} sm={4} container justify="flex-start">
               <TextField
@@ -262,16 +304,12 @@ const ReservationEdit = (props) => {
                     formick.touched.contactType &&
                     Boolean(formick.errors.contactType)
                   }
-                  helperText={
+                  helpertext={
                     formick.touched.contactType && formick.errors.contactType
                   }
                 >
                   {allContactTypes.map((elm) => {
-                    return (
-                      <Menu key={elm.name} value={elm.name}>
-                        {elm.name}
-                      </Menu>
-                    );
+                    return <MenuItem value={elm.name}>{elm.name}</MenuItem>;
                   })}
                 </Select>
               </FormControl>
@@ -306,7 +344,13 @@ const ReservationEdit = (props) => {
                   formick.setTouched({ ...formick.touched, birthday: true });
                 }}
                 onChange={formick.handleChange}
-                value={formick.values.birthday}
+                value={
+                  // formick.values.birthday
+                  formick.values.block
+                    ? formick.values.birthday &&
+                      format(new Date(formick.values.birthday), "yyyy-MM-dd")
+                    : formick.values.birthday
+                }
                 InputLabelProps={{
                   shrink: true,
                 }}
@@ -365,7 +409,7 @@ const ReservationEdit = (props) => {
                 }}
                 onChange={(event, editor) => {
                   const data = editor.getData();
-
+                  formick.setValues({ ...formick.values, description: data });
                   //   setInputs({ ...inputs, description: data });
                   // console.log( { event, editor, data } );
                 }}
@@ -379,6 +423,14 @@ const ReservationEdit = (props) => {
               ></CKEditor>
               {/* </Paper> */}
             </Grid>
+            <Button
+              disabled={!formick.isValid}
+              className={classes.buttomSend}
+              type="submit"
+              // onClick={formick.handleSubmit}
+            >
+              Update Reservation
+            </Button>
           </Grid>
         </form>
       )}
