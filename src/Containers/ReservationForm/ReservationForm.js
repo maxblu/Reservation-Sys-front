@@ -39,8 +39,9 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(1),
   },
   editor: {
-    height: "50%",
-    width: "75%",
+    // height: "50%",
+    width: "99%",
+    marginLeft: ".5%",
   },
   buttomSend: {
     backgroundColor: "red",
@@ -53,6 +54,9 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: "red",
       color: "white",
     },
+  },
+  form: {
+    width: "inherit",
   },
 }));
 
@@ -197,6 +201,7 @@ const ReservationForm = (props) => {
       .then((resp) => {
         setInputs({ ...inputs, loading: false, errors: false });
         setOpen(true);
+        props.history.push("/Reservations");
       })
       .catch((e) => {
         setInputs({ ...inputs, loading: false, errors: true });
@@ -300,8 +305,9 @@ const ReservationForm = (props) => {
         saveReservation(reservation);
       } else {
         let current = null;
+
         allContactTypes.forEach((el) => {
-          if (el.name === inputs.contactType) {
+          if (el.name === formick.values.contactType) {
             current = el.id;
           }
         });
@@ -313,6 +319,7 @@ const ReservationForm = (props) => {
           birthDate: formick.values.birthday,
         };
 
+        console.log(contact);
         setInputs({ ...inputs, loading: true });
         axios
           .post("/Contact", contact)
@@ -320,11 +327,9 @@ const ReservationForm = (props) => {
             const reservation = {
               title: formick.values.title,
               description: formick.values.description,
-              contactId: inputs.contactId,
               date: formick.values.date,
               creationDate: new Date(),
               contactId: resp.data.id,
-              creationDate: new Date(),
             };
 
             saveReservation(reservation);
@@ -341,7 +346,7 @@ const ReservationForm = (props) => {
   console.log(formick);
   return (
     <Grid container justify="center">
-      <form onSubmit={() => formick.handleSubmit}>
+      <form onSubmit={() => formick.handleSubmit} className={classes.form}>
         {loading ? (
           <Spinner />
         ) : (
@@ -434,7 +439,6 @@ const ReservationForm = (props) => {
                 variant="outlined"
                 type="date"
                 required
-                defaultValue="2017-05-24"
                 onBlur={() => {
                   formick.setTouched({ ...formick.touched, birthday: true });
                 }}
@@ -500,6 +504,7 @@ const ReservationForm = (props) => {
             }}
             onChange={(event, editor) => {
               const data = editor.getData();
+              formick.setValues({ ...formick.values, description: data });
               setInputs({ ...inputs, description: data });
               // console.log( { event, editor, data } );
             }}

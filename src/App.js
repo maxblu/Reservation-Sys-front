@@ -5,6 +5,7 @@ import { Redirect, Route, Switch } from "react-router-dom";
 import Layout from "./hoc/Layout/Layout";
 import Reservations from "./Containers/Reservations/Reservations";
 import ReservationForm from "./Containers/ReservationForm/ReservationForm";
+import ReservationEdit from "./Containers/ReservationEdit/ReservationEdit";
 import Contacts from "./Containers/Contacts/Contacs";
 
 function App() {
@@ -18,6 +19,11 @@ function App() {
             path="/Reservations/Create"
             exact
             component={ReservationForm}
+          ></Route>
+          <Route
+            path="/Reservation/edit"
+            exact
+            component={ReservationEdit}
           ></Route>
           <Redirect from="/" to="Reservations" />
         </Switch>
