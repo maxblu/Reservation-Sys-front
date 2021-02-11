@@ -4,6 +4,7 @@ import {
   Button,
   FormControl,
   Grid,
+  Hidden,
   IconButton,
   InputLabel,
   ListItemText,
@@ -25,6 +26,7 @@ import * as Yup from "yup";
 import axios from "../../axiosInstance";
 import Spinner from "../../Components/Spinner/Spinner";
 import { format } from "date-fns";
+import SubBannerCreate from "../../Components/SubBannerCreate/SubBannerCreate";
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -47,13 +49,23 @@ const useStyles = makeStyles((theme) => ({
   buttomSend: {
     backgroundColor: "red",
     color: "white",
-    margin: theme.spacing(2),
+    margin: theme.spacing(4),
     position: "static",
     top: "90%",
     right: "10%",
+    width: "15%",
+
     "&:hover": {
       backgroundColor: "red",
       color: "white",
+    },
+  },
+
+  buttonAction: {
+    color: "white",
+    backgroundColor: " rgb(173, 173, 173)",
+    "&:hover": {
+      backgroundColor: "red",
     },
   },
   form: {
@@ -140,10 +152,6 @@ const ReservationForm = (props) => {
         console.log(e);
       });
   }, []);
-
-  // useEffect(() => {}, [loading]);
-
-  console.log(inputs);
 
   // const handleSave = (values) => {
   //   let reservation = null;
@@ -344,217 +352,275 @@ const ReservationForm = (props) => {
     validateOnChange: true,
     isInitialValid: true,
   });
-  console.log(formick.values.birthday);
-  console.log(new Date(formick.values.birthday));
-  if (formick.values.birthday)
-    console.log(format(new Date(formick.values.birthday), "yyyy-MM-dd"));
+
+  const handleChangeViewButton = (action) => {
+    if (action === "edit") {
+      props.history.push("/contact/edit", {
+        contact: {
+          contactId: inputs.contactId,
+          contactName: formick.values.contactName,
+          contactType: formick.values.contactType,
+          phone: formick.values.phone,
+          birthday: formick.values.birthday,
+        },
+        contactTypes: allContactTypes,
+      });
+    } else {
+      props.history.replace("/contacts");
+    }
+  };
+
   return (
-    <Grid container justify="center">
-      <form onSubmit={() => formick.handleSubmit} className={classes.form}>
-        {loading ? (
-          <Spinner />
-        ) : (
-          // <Form>
-          <Grid item xs={12} sm={12} container justify="space-evenly">
-            <Grid item xs={12} sm={3}>
-              <TextField
-                required
-                id="contactName"
-                className={classes.formControl}
-                variant="outlined"
-                name="contactName"
-                label="Contact Name"
-                // error={true}
-                // value={fo}
-                // helperText={"fgaf"}
-                // onChange={handleChange}
-                onBlur={() => {
-                  formick.setTouched({ ...formick.touched, contactName: true });
-                }}
-                value={formick.values.contactName}
-                onChange={handleChangeContactName}
-                error={
-                  formick.touched.contactName &&
-                  Boolean(formick.errors.contactName)
-                }
-                helperText={
-                  formick.touched.contactName && formick.errors.contactName
-                }
-              />
-            </Grid>
-            <Grid item xs={12} sm={3}>
-              <FormControl variant="filled" className={classes.formControl}>
-                <InputLabel id="select-filled-label">Contact Type</InputLabel>
-                <Select
-                  required
-                  id="contactType"
-                  name="contactType"
-                  // value={inputs.contactType}
-                  // onChange={handleChange}
-                  variant="outlined"
-                  disabled={inputs.block}
-                  value={formick.values.contactType}
-                  onBlur={() => {
-                    formick.setTouched({
-                      ...formick.touched,
-                      contactType: true,
-                    });
-                  }}
-                  onChange={formick.handleChange}
-                  error={
-                    formick.touched.contactType &&
-                    Boolean(formick.errors.contactType)
-                  }
-                  helperText={
-                    formick.touched.contactType && formick.errors.contactType
-                  }
-                >
-                  {allContactTypes.map((elm) => {
-                    return <MenuItem value={elm.name}>{elm.name}</MenuItem>;
-                  })}
-                </Select>
-              </FormControl>
-            </Grid>
-            <Grid item xs={12} sm={3}>
-              <TextField
-                className={classes.formControl}
-                name="phone"
-                variant="outlined"
-                label="Phone"
-                disabled={inputs.block}
-                // value={inputs.phone}
-                // onChange={handleChange}
-                onBlur={() => {
-                  formick.setTouched({ ...formick.touched, phone: true });
-                }}
-                value={formick.values.phone}
-                onChange={formick.handleChange}
-                error={formick.touched.phone && Boolean(formick.errors.phone)}
-                helperText={formick.touched.phone && formick.errors.phone}
-              />
-            </Grid>
-            <Grid container item xs={5} sm={5}>
-              <TextField
-                className={classes.formControl}
-                id="birthday"
-                name="birthday"
-                label="Birthday"
-                disabled={inputs.block}
-                variant="outlined"
-                type="date"
-                required
-                onBlur={() => {
-                  formick.setTouched({ ...formick.touched, birthday: true });
-                }}
-                onChange={formick.handleChange}
-                value={
-                  !inputs.block
-                    ? formick.values.birthday
-                    : format(new Date(formick.values.birthday), "yyyy-MM-dd")
-                }
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                error={
-                  formick.touched.birthday && Boolean(formick.errors.birthday)
-                }
-                helperText={formick.touched.birthday && formick.errors.birthday}
-              />
-            </Grid>
-            <Grid container item xs={5} sm={5}>
-              <TextField
-                className={classes.formControl}
-                name="date"
-                id="date"
-                label="Date"
-                variant="outlined"
-                type="datetime-local"
-                required
-                onBlur={() => {
-                  formick.setTouched({ ...formick.touched, date: true });
-                }}
-                onChange={formick.handleChange}
-                value={formick.values.date}
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                error={formick.touched.date && Boolean(formick.errors.date)}
-                helperText={formick.touched.date && formick.errors.date}
-              />
-            </Grid>
-
-            <Grid item xs={12} sm={3}>
-              <TextField
-                className={classes.formControl}
-                name="title"
-                variant="outlined"
-                label="Title"
-                onBlur={() => {
-                  formick.setTouched({ ...formick.touched, title: true });
-                }}
-                value={formick.values.title}
-                onChange={formick.handleChange}
-                error={formick.touched.title && Boolean(formick.errors.title)}
-                helperText={formick.touched.title && formick.errors.title}
-              />
-            </Grid>
-          </Grid>
-          // </Form>
-        )}
-        <Grid item className={classes.editor} xs={12}>
-          {/* <Paper > */}
-
-          <CKEditor
-            editor={ClassicEditor}
-            onReady={(editor) => {
-              // You can store the "editor" and use when it is needed.
-              console.log("Editor is ready to use!", editor);
-            }}
-            onChange={(event, editor) => {
-              const data = editor.getData();
-              formick.setValues({ ...formick.values, description: data });
-              setInputs({ ...inputs, description: data });
-              // console.log( { event, editor, data } );
-            }}
-            onBlur={(event, editor) => {
-              console.log("Blur.", editor);
-            }}
-            onFocus={(event, editor) => {
-              console.log("Focus.", editor);
-            }}
-          ></CKEditor>
-          {/* </Paper> */}
-        </Grid>
-        <Grid item xs={10} md={8}>
-          <Snackbar open={open} autoHideDuration={5000}>
-            {!inputs.errors ? (
-              <Alert severity="success">Reservation saved</Alert>
+    <React.Fragment>
+      <SubBannerCreate
+        disabled={!inputs.block}
+        nextAction="List Reservation"
+        currentAction="Create Reservation"
+        handleChangeViewButton={handleChangeViewButton}
+      />
+      <Paper>
+        <Grid container justify="center">
+          <form onSubmit={() => formick.handleSubmit} className={classes.form}>
+            {loading ? (
+              <Spinner />
             ) : (
-              <Alert severity="error">Some errors</Alert>
+              // <Form>
+              <Grid item xs={12} sm={12} container justify="center">
+                <Grid container item xs={12} sm={3} justify="flex-start">
+                  <TextField
+                    required
+                    id="contactName"
+                    className={classes.formControl}
+                    variant="outlined"
+                    name="contactName"
+                    label="Contact Name"
+                    // error={true}
+                    // value={fo}
+                    // helperText={"fgaf"}
+                    // onChange={handleChange}
+                    onBlur={() => {
+                      formick.setTouched({
+                        ...formick.touched,
+                        contactName: true,
+                      });
+                    }}
+                    value={formick.values.contactName}
+                    onChange={handleChangeContactName}
+                    error={
+                      formick.touched.contactName &&
+                      Boolean(formick.errors.contactName)
+                    }
+                    helperText={
+                      formick.touched.contactName && formick.errors.contactName
+                    }
+                  />
+                </Grid>
+                <Grid container item xs={12} sm={3} justify="center">
+                  <FormControl variant="filled" className={classes.formControl}>
+                    <InputLabel id="select-filled-label">
+                      Contact Type
+                    </InputLabel>
+                    <Select
+                      required
+                      id="contactType"
+                      name="contactType"
+                      // value={inputs.contactType}
+                      // onChange={handleChange}
+                      variant="outlined"
+                      disabled={inputs.block}
+                      value={formick.values.contactType}
+                      onBlur={() => {
+                        formick.setTouched({
+                          ...formick.touched,
+                          contactType: true,
+                        });
+                      }}
+                      onChange={formick.handleChange}
+                      error={
+                        formick.touched.contactType &&
+                        Boolean(formick.errors.contactType)
+                      }
+                      helperText={
+                        formick.touched.contactType &&
+                        formick.errors.contactType
+                      }
+                    >
+                      {allContactTypes.map((elm) => {
+                        return <MenuItem value={elm.name}>{elm.name}</MenuItem>;
+                      })}
+                    </Select>
+                  </FormControl>
+                </Grid>
+                <Grid container justify="flex-end" item xs={12} sm={3}>
+                  <TextField
+                    className={classes.formControl}
+                    name="phone"
+                    variant="outlined"
+                    label="Phone"
+                    disabled={inputs.block}
+                    // value={inputs.phone}
+                    // onChange={handleChange}
+                    onBlur={() => {
+                      formick.setTouched({ ...formick.touched, phone: true });
+                    }}
+                    value={formick.values.phone}
+                    onChange={formick.handleChange}
+                    error={
+                      formick.touched.phone && Boolean(formick.errors.phone)
+                    }
+                    helperText={formick.touched.phone && formick.errors.phone}
+                  />
+                </Grid>
+                <Grid container item xs={5} sm={5} justify="flex-end">
+                  <TextField
+                    className={classes.formControl}
+                    id="birthday"
+                    name="birthday"
+                    label="Birthday"
+                    disabled={inputs.block}
+                    variant="outlined"
+                    type="date"
+                    required
+                    onBlur={() => {
+                      formick.setTouched({
+                        ...formick.touched,
+                        birthday: true,
+                      });
+                    }}
+                    onChange={formick.handleChange}
+                    value={
+                      !inputs.block
+                        ? formick.values.birthday
+                        : format(
+                            new Date(formick.values.birthday),
+                            "yyyy-MM-dd"
+                          )
+                    }
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    error={
+                      formick.touched.birthday &&
+                      Boolean(formick.errors.birthday)
+                    }
+                    helperText={
+                      formick.touched.birthday && formick.errors.birthday
+                    }
+                  />
+                </Grid>
+                <Grid container item xs={5} sm={5} justify="flex-start">
+                  <TextField
+                    className={classes.formControl}
+                    name="date"
+                    id="date"
+                    label="Date"
+                    variant="outlined"
+                    type="datetime-local"
+                    required
+                    onBlur={() => {
+                      formick.setTouched({ ...formick.touched, date: true });
+                    }}
+                    onChange={formick.handleChange}
+                    value={formick.values.date}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    error={formick.touched.date && Boolean(formick.errors.date)}
+                    helperText={formick.touched.date && formick.errors.date}
+                  />
+                </Grid>
+
+                <Grid container justify="center" item xs={12} sm={3}>
+                  <TextField
+                    className={classes.formControl}
+                    name="title"
+                    variant="outlined"
+                    label="Title"
+                    onBlur={() => {
+                      formick.setTouched({ ...formick.touched, title: true });
+                    }}
+                    value={formick.values.title}
+                    onChange={formick.handleChange}
+                    error={
+                      formick.touched.title && Boolean(formick.errors.title)
+                    }
+                    helperText={formick.touched.title && formick.errors.title}
+                  />
+                </Grid>
+              </Grid>
+              // </Form>
             )}
-          </Snackbar>
-        </Grid>
-        <Grid
-          item
-          container
-          justify="flex-end"
-          alignContent="space-around"
-          xs={12}
-        >
-          {/* <Button className={classes.buttomSend} onClick={handleSave}>
+            <Grid item className={classes.editor} xs={12}>
+              {/* <Paper > */}
+
+              <CKEditor
+                editor={ClassicEditor}
+                onReady={(editor) => {
+                  // You can store the "editor" and use when it is needed.
+                  console.log("Editor is ready to use!", editor);
+                }}
+                onChange={(event, editor) => {
+                  const data = editor.getData();
+                  formick.setValues({ ...formick.values, description: data });
+                  setInputs({ ...inputs, description: data });
+                  // console.log( { event, editor, data } );
+                }}
+                onBlur={(event, editor) => {
+                  console.log("Blur.", editor);
+                }}
+                onFocus={(event, editor) => {
+                  console.log("Focus.", editor);
+                }}
+              ></CKEditor>
+              {/* </Paper> */}
+            </Grid>
+            <Grid item xs={10} md={8}>
+              <Snackbar open={open} autoHideDuration={5000}>
+                {!inputs.errors ? (
+                  <Alert severity="success">Reservation saved</Alert>
+                ) : (
+                  <Alert severity="error">Some errors</Alert>
+                )}
+              </Snackbar>
+            </Grid>
+            <Grid
+              item
+              container
+              justify="flex-end"
+              alignContent="space-around"
+              xs={12}
+            >
+              {/* <Button className={classes.buttomSend} onClick={handleSave}>
             Send
           </Button> */}
-          <Button
-            disabled={!formick.isValid}
-            className={classes.buttomSend}
-            type="submit"
-            onClick={formick.handleSubmit}
-          >
-            Send
-          </Button>
+              <Hidden xsDown>
+                <Button
+                  disabled={!formick.isValid}
+                  className={classes.buttomSend}
+                  type="submit"
+                  onClick={formick.handleSubmit}
+                >
+                  Send
+                </Button>
+              </Hidden>
+              <Hidden smUp>
+                <Button
+                  disabled={!formick.isValid}
+                  className={classes.buttomSend}
+                  style={{
+                    width: "100%",
+                  }}
+                  type="submit"
+                  onClick={formick.handleSubmit}
+                >
+                  Send
+                </Button>
+              </Hidden>
+            </Grid>
+          </form>
         </Grid>
-      </form>
-    </Grid>
+      </Paper>
+    </React.Fragment>
   );
 };
 

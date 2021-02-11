@@ -12,8 +12,10 @@ import {
   ListItemText,
   makeStyles,
   MenuItem,
+  Paper,
   Select,
   Typography,
+  useMediaQuery,
 } from "@material-ui/core";
 import StarRatingComponent from "react-star-rating-component";
 
@@ -29,6 +31,7 @@ import {
   ArrowRight,
   Favorite,
 } from "@material-ui/icons";
+import SubBanner from "../../Components/SubBanner/SubBanner";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -83,6 +86,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Reservations = (props) => {
   const classes = useStyles();
+
   const [reservations, setReservations] = useState([]);
   const [loading, setLoading] = useState(false);
   const [currentOrder, setCurrentOrder] = useState("");
@@ -228,151 +232,185 @@ const Reservations = (props) => {
     });
   };
 
+  const handleChangeViewButton = () => {
+    props.history.push("/reservations/create");
+  };
+
   console.log("Re render");
   return (
-    <Grid container justify="center">
-      <Grid item xs={12} container justify="flex-start">
-        <Hidden xsDown>
-          <FormControl variant="filled" className={classes.formControl}>
-            <InputLabel id="select-filled-label">Sort by</InputLabel>
-            <Select
-              name="sort"
-              value={currentOrder}
-              onChange={handleSort}
-              variant="outlined"
-            >
-              <MenuItem value={"Date asc"}> Date Ascending </MenuItem>
-              <MenuItem value={"Date dsc"}> Date Descending </MenuItem>
-              <MenuItem value={"Title asc"}> Alphabetic Ascending </MenuItem>
-              <MenuItem value={"Title dsc"}> Alphabetic Descending </MenuItem>
-              <MenuItem value={"Ranking"}> Ranking </MenuItem>
-            </Select>
-          </FormControl>
-        </Hidden>
-
-        <Hidden smUp>
-          <FormControl variant="filled" className={classes.formControlMovil}>
-            <InputLabel id="select-filled-label">Sort By </InputLabel>
-            <Select value={""} onChange={handleSort} variant="outlined">
-              <MenuItem value={"Date asc"}> Date Ascending </MenuItem>
-              <MenuItem value={"Date dsc"}> Date Descending </MenuItem>
-              <MenuItem value={"Title asc"}> Alphabetic Ascending </MenuItem>
-              <MenuItem value={"Title dsc"}> Alphabetic Descending </MenuItem>
-              <MenuItem value={"Ranking"}> Ranking </MenuItem>
-            </Select>
-          </FormControl>
-          `
-        </Hidden>
-      </Grid>
-      <Grid item xs={12} sm={11}>
-        <List>
-          {loading ? (
-            <Spinner />
-          ) : (
-            reservations.map((reser, index) => {
-              return (
-                <Grid
-                  key={reser.id}
-                  item
-                  container
-                  justify="center"
-                  className={classes.gridListItem}
+    <React.Fragment>
+      <SubBanner
+        nextAction="Create Reservation"
+        currentAction="Reservation List"
+        handleChangeViewButton={handleChangeViewButton}
+      />
+      <Paper>
+        <Grid container justify="center">
+          <Grid item xs={12} container justify="flex-start">
+            <Hidden xsDown>
+              <FormControl variant="filled" className={classes.formControl}>
+                <InputLabel id="select-filled-label">Sort by</InputLabel>
+                <Select
+                  name="sort"
+                  value={currentOrder}
+                  onChange={handleSort}
+                  variant="outlined"
                 >
-                  <ListItem>
-                    <Grid item xs={5} sm={4} container justify="flex-start">
-                      <ListItemText
-                        primary={reser.title}
-                        secondary={formatDate(reser.date)}
-                      ></ListItemText>
-                    </Grid>
-                    <Hidden xsDown>
-                      <Grid item sm={4} container justify="center">
-                        <StarRatingComponent
-                          name={index}
-                          starCount={5}
-                          value={reser.ranking}
-                          onStarClick={(nextV, prevV) => {
-                            handleRatingChange(nextV, prevV, index);
-                          }}
-                        />
-                      </Grid>
-                    </Hidden>
-                    <Grid item xs={5} sm={4} container justify="center">
-                      <IconButton
-                        className={
-                          reser.isFavorite
-                            ? classes.activeFavorite
-                            : classes.disableFavorite
-                        }
-                        onClick={(e) => handleFavoriteChange(e, index)}
-                      >
-                        <Typography
-                          variant="caption"
-                          className={
-                            reser.isFavorite
-                              ? classes.favoriteText
-                              : classes.favoriteTextDisable
-                          }
-                        >
-                          Add Favorites
-                        </Typography>
-                        <Favorite />
-                      </IconButton>
-                    </Grid>
-                    <Grid item xs={2} sm={4} container justify="flex-end">
-                      <Button
-                        className={classes.buttonAction}
-                        onClick={(e) => handlerEdit(e, index)}
-                      >
-                        Editar
-                      </Button>
-                    </Grid>
-                  </ListItem>
-                </Grid>
-              );
-            })
-          )}
-        </List>
-        <Grid item container justify="center">
-          <IconButton
-            disabled={pageData.pageNumber <= 1}
-            onClick={(e) => {
-              handlePagination(e, false);
-            }}
-          >
-            <ArrowBackIos />
-          </IconButton>
-          <ListItemText primary={pageData.pageNumber} />
-          <IconButton
-            disabled={pageData.pageNumber >= pageData.totalPages}
-            onClick={(e) => {
-              handlePagination(e, true);
-            }}
-          >
-            <ArrowForwardIos />
-          </IconButton>
-        </Grid>
+                  <MenuItem value={"Date asc"}> Date Ascending </MenuItem>
+                  <MenuItem value={"Date dsc"}> Date Descending </MenuItem>
+                  <MenuItem value={"Title asc"}>
+                    {" "}
+                    Alphabetic Ascending{" "}
+                  </MenuItem>
+                  <MenuItem value={"Title dsc"}>
+                    {" "}
+                    Alphabetic Descending{" "}
+                  </MenuItem>
+                  <MenuItem value={"Ranking"}> Ranking </MenuItem>
+                </Select>
+              </FormControl>
+            </Hidden>
 
-        <Grid
-          item
-          container
-          justify="space-around"
-          style={{
-            paddingBottom: "5%",
-            paddingTop: "5%",
-          }}
-        >
-          <Button
-            className={classes.buttonAction}
-            onClick={(e) => {
-              props.history.push("/contacts");
-            }}
-          >
-            Contact List
-          </Button>
+            <Hidden smUp>
+              <FormControl
+                variant="filled"
+                className={classes.formControlMovil}
+              >
+                <InputLabel id="select-filled-label">Sort By </InputLabel>
+                <Select value={""} onChange={handleSort} variant="outlined">
+                  <MenuItem value={"Date asc"}> Date Ascending </MenuItem>
+                  <MenuItem value={"Date dsc"}> Date Descending </MenuItem>
+                  <MenuItem value={"Title asc"}>
+                    {" "}
+                    Alphabetic Ascending{" "}
+                  </MenuItem>
+                  <MenuItem value={"Title dsc"}>
+                    {" "}
+                    Alphabetic Descending{" "}
+                  </MenuItem>
+                  <MenuItem value={"Ranking"}> Ranking </MenuItem>
+                </Select>
+              </FormControl>
+              `
+            </Hidden>
+          </Grid>
+          <Grid item xs={12} sm={11}>
+            <List>
+              {loading ? (
+                <Spinner />
+              ) : (
+                reservations.map((reser, index) => {
+                  return (
+                    <Grid
+                      key={reser.id}
+                      item
+                      container
+                      justify="center"
+                      className={classes.gridListItem}
+                    >
+                      <ListItem>
+                        <Grid item xs={5} sm={4} container justify="flex-start">
+                          <ListItemText
+                            primary={reser.title}
+                            secondary={formatDate(reser.date)}
+                          ></ListItemText>
+                        </Grid>
+                        <Hidden xsDown>
+                          <Grid item sm={4} container justify="center">
+                            <StarRatingComponent
+                              name={index}
+                              starCount={5}
+                              value={reser.ranking}
+                              onStarClick={(nextV, prevV) => {
+                                handleRatingChange(nextV, prevV, index);
+                              }}
+                            />
+                          </Grid>
+                        </Hidden>
+                        <Grid item xs={5} sm={4} container justify="center">
+                          <IconButton
+                            // className={
+                            //   reser.isFavorite
+                            //     ? classes.activeFavorite
+                            //     : classes.disableFavorite
+                            // }
+                            onClick={(e) => handleFavoriteChange(e, index)}
+                          >
+                            <Typography
+                              variant="caption"
+                              className={
+                                reser.isFavorite
+                                  ? classes.favoriteText
+                                  : classes.favoriteTextDisable
+                              }
+                            >
+                              Add Favorites
+                            </Typography>
+                            <Favorite
+                              className={
+                                reser.isFavorite
+                                  ? classes.activeFavorite
+                                  : classes.disableFavorite
+                              }
+                            />
+                          </IconButton>
+                        </Grid>
+                        <Grid item xs={2} sm={4} container justify="flex-end">
+                          <Button
+                            className={classes.buttonAction}
+                            onClick={(e) => handlerEdit(e, index)}
+                          >
+                            Editar
+                          </Button>
+                        </Grid>
+                      </ListItem>
+                    </Grid>
+                  );
+                })
+              )}
+            </List>
+            <Grid item container justify="center">
+              <IconButton
+                disabled={pageData.pageNumber <= 1}
+                onClick={(e) => {
+                  handlePagination(e, false);
+                }}
+              >
+                <ArrowBackIos />
+              </IconButton>
+              <ListItemText primary={pageData.pageNumber} />
+              <IconButton
+                disabled={pageData.pageNumber >= pageData.totalPages}
+                onClick={(e) => {
+                  handlePagination(e, true);
+                }}
+              >
+                <ArrowForwardIos />
+              </IconButton>
+            </Grid>
+
+            <Grid
+              item
+              container
+              justify="space-around"
+              style={{
+                paddingBottom: "5%",
+                paddingTop: "5%",
+              }}
+            >
+              <Button
+                className={classes.buttonAction}
+                onClick={(e) => {
+                  props.history.push("/contacts");
+                }}
+              >
+                Contact List
+              </Button>
+            </Grid>
+          </Grid>
         </Grid>
-      </Grid>
-    </Grid>
+      </Paper>
+    </React.Fragment>
   );
 };
 

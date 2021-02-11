@@ -1,14 +1,17 @@
 import "./App.css";
-import React from "react";
-import { Redirect, Route, Switch } from "react-router-dom";
+import React, { useHistory, useState } from "react";
+import { Redirect, Route, Router, Switch } from "react-router-dom";
 
 import Layout from "./hoc/Layout/Layout";
 import Reservations from "./Containers/Reservations/Reservations";
 import ReservationForm from "./Containers/ReservationForm/ReservationForm";
 import ReservationEdit from "./Containers/ReservationEdit/ReservationEdit";
 import Contacts from "./Containers/Contacts/Contacs";
+import ContactEdit from "./Containers/ContactEdit/ContactEdit";
 
-function App() {
+const App = (props) => {
+  console.log(props);
+
   return (
     <div className="App">
       <Layout>
@@ -25,11 +28,12 @@ function App() {
             exact
             component={ReservationEdit}
           ></Route>
+          <Route path="/Contact/edit" component={ContactEdit} />
           <Redirect from="/" to="Reservations" />
         </Switch>
       </Layout>
     </div>
   );
-}
+};
 
 export default App;
