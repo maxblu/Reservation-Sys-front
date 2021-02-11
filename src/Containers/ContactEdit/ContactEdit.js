@@ -53,7 +53,7 @@ const ContactEdit = (props) => {
   const classes = useStyles();
   const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
   const [allContactTypes, setAllContactTypes] = useState();
-  const [contact, setContact] = useState();
+  const [creation, setCreation] = useState();
 
   const [serverError, setServerError] = useState(false);
   const [original, setOriginal] = useState(
@@ -100,7 +100,11 @@ const ContactEdit = (props) => {
       axios
         .put(`/contact/${contact.id}`, contact)
         .then((resp) => {
-          props.history.push("/contacts");
+          if (creation) {
+            props.history.push("/reservation/create");
+          } else {
+            props.history.push("/contacts");
+          }
         })
         .catch((e) => {
           console.log(e.response);
@@ -112,12 +116,23 @@ const ContactEdit = (props) => {
 
   useEffect(() => {
     const data = props.history.location.state;
+    setCreation(data.creation);
 
     axios
       .get("/contactType")
       .then((resp) => {
         setAllContactTypes(resp.data);
-        formick.setValues({ ...formick.values, ...data.contact });
+        if (data.creation) {
+          formick.setValues({ ...formick.values, ...data.contact });
+        } else {
+          formick.setValues({
+            ...formick.values,
+            ...data.contact,
+            contactType: data.contact.contactType.name,
+          });
+
+          // }
+        }
       })
       .catch((e) => {
         console.log(e.response);
@@ -159,13 +174,17 @@ const ContactEdit = (props) => {
       });
   };
 
-  const handleChangeViewButton = (action) => {};
+  const handleChangeViewButton = (action) => {
+    // console.log(props.history);
+    props.history.goBack();
+  };
 
+  console.log(formick.values);
   console.log(serverError);
   return (
     <React.Fragment>
       <SubBanner
-        nextAction="List Reservation"
+        nextAction="Go Back"
         currentAction="Edit Reservation"
         handleChangeViewButton={handleChangeViewButton}
       />

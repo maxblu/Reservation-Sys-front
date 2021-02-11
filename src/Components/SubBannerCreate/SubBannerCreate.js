@@ -106,7 +106,7 @@ const SubBannerCreate = (props) => {
               </Button>
             </Grid>
           </Hidden>
-          <Hidden mdUp>
+          <Hidden smUp>
             <Button
               className={classes.buttonAction}
               onClick={(e) => setDrawer(true)}

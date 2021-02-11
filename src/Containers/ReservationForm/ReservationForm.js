@@ -363,7 +363,7 @@ const ReservationForm = (props) => {
           phone: formick.values.phone,
           birthday: formick.values.birthday,
         },
-        contactTypes: allContactTypes,
+        creation: true,
       });
     } else {
       props.history.replace("/contacts");

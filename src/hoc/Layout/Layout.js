@@ -35,6 +35,13 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: "1%",
     textAlign: "center",
     marginBottom: "4%",
+    fontWeight: "bolder",
+  },
+  titleGridSecond: {
+    textAlign: "left",
+    marginBottom: "4%",
+    fontWeight: "lighter",
+    fontFamily: "revert",
   },
   subName: {
     fontWeight: theme.typography.fontWeightLight,
@@ -84,13 +91,10 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: "red",
     },
   },
-}));
-
-const MySubTypography = withStyles({
-  h1: {
-    fontWeight: "lighter",
+  navigation: {
+    marginBottom: "4%",
   },
-})(Typography);
+}));
 
 const Layout = (props) => {
   const classes = useStyles();
@@ -98,36 +102,6 @@ const Layout = (props) => {
   const [currentAction, setCurrentAction] = useState("Create Reservations");
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [menuOpen, setMenuOpen] = useState(false);
-  // const [currentPath, setcurrentPath] = useState('/');
-
-  // useEffect(() => {
-  //   console.log("I'm in: ", history.location.pathname);
-
-  //   switch (history.location.pathname) {
-  //     case "/reservations":
-  //       setCurrentAction("Create Reservations");
-  //       break;
-  //     case "/reservations/create":
-  //       setCurrentAction("Reservation List");
-  //       break;
-  //     case "/reservation/edit":
-  //       setCurrentAction("Reservation List");
-  //       break;
-  //     case "/contacts":
-  //       setCurrentAction("Create Contact");
-  //       break;
-  //     case "/contacts/create":
-  //       setCurrentAction("Contacts List");
-  //       break;
-
-  //     default:
-  //       break;
-  //   }
-
-  //   // setcurrentPath(history.location.pathname)
-  // }, []);
-
-  console.log(history);
 
   const handleChangeViewButton = (action) => {
     setMenuOpen(false);
@@ -173,14 +147,34 @@ const Layout = (props) => {
             <Grid
               item
               container
-              sm={7}
-              md={5}
+              sm={3}
+              md={3}
               lg={4}
               justify="flex-end"
               className={classes.titleGrid}
             >
               <Typography variant="h1" gutterBottom>
-                ISU Corp
+                ISU
+              </Typography>
+            </Grid>
+            <Grid
+              item
+              container
+              sm={3}
+              md={2}
+              lg={2}
+              justify="flex-start"
+              className={classes.titleGridSecond}
+            >
+              <Typography
+                variant="h1"
+                gutterBottom
+                style={{
+                  fontWeight: "lighter",
+                  fontFamily: "revert",
+                }}
+              >
+                Corp
               </Typography>
             </Grid>
           </Hidden>
@@ -189,12 +183,30 @@ const Layout = (props) => {
             <Grid
               container
               item
-              xs={5}
-              justify="center"
+              xs={2}
+              justify="flex-end"
               className={classes.titleGrid}
             >
-              <Typography variant="h6" gutterBottom>
-                ISU Corp
+              <Typography variant="h5" gutterBottom>
+                ISU
+              </Typography>
+            </Grid>
+            <Grid
+              container
+              item
+              xs={2}
+              justify="flex-start"
+              className={classes.titleGridSecond}
+            >
+              <Typography
+                variant="h5"
+                style={{
+                  fontWeight: "lighter",
+                  fontFamily: "revert",
+                }}
+                gutterBottom
+              >
+                Corp
               </Typography>
             </Grid>
           </Hidden>
@@ -202,7 +214,7 @@ const Layout = (props) => {
             <Grid
               sm={5}
               md={7}
-              lg={5}
+              lg={4}
               item
               container
               justify="flex-start"
@@ -219,7 +231,13 @@ const Layout = (props) => {
             </Grid>
           </Hidden>
           <Hidden smUp>
-            <Grid item xs={6} container justify="flex-end">
+            <Grid
+              item
+              xs={6}
+              className={classes.navigation}
+              container
+              justify="flex-end"
+            >
               <IconButton
                 aria-controls="simple-menu"
                 aria-haspopup="true"

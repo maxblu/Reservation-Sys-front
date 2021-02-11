@@ -163,6 +163,7 @@ const Contactos = (props) => {
           phone: contacts[current.id].phone,
           birthday: contacts[current.id].birthDate,
         },
+        creation: false,
       });
     }
   };

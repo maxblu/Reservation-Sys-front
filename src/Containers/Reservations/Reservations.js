@@ -389,7 +389,7 @@ const Reservations = (props) => {
               </IconButton>
             </Grid>
 
-            <Grid
+            {/* <Grid
               item
               container
               justify="space-around"
@@ -406,7 +406,7 @@ const Reservations = (props) => {
               >
                 Contact List
               </Button>
-            </Grid>
+            </Grid> */}
           </Grid>
         </Grid>
       </Paper>

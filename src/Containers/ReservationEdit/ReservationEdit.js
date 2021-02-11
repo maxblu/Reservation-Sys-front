@@ -42,6 +42,7 @@ const useStyles = makeStyles((theme) => ({
       color: "white",
     },
   },
+
   editor: {
     width: "99%",
     marginLeft: ".5%",
@@ -129,18 +130,7 @@ const ReservationEdit = (props) => {
       block: true,
     },
     validationSchema: validationSchema,
-    onReset: {
-      contactName: "",
-      contactType: "",
-      phone: "",
-      birthday: "",
-      date: "",
-      description: "",
-      title: " ",
-      contactTypeId: " ",
-      loading: false,
-    },
-
+    isInitialValid: true,
     onSubmit: (values) => {
       let reservationUpd = null;
       reservationUpd = {
