@@ -11,7 +11,12 @@ import {
   Button,
   Card,
   CardContent,
+  Menu,
+  MenuItem,
+  IconButton,
 } from "@material-ui/core";
+
+import MenuIcon from "@material-ui/icons/Menu";
 import { ArrowRight } from "@material-ui/icons";
 import "./Layout.css";
 
@@ -91,60 +96,68 @@ const Layout = (props) => {
   const classes = useStyles();
   const history = useHistory();
   const [currentAction, setCurrentAction] = useState("Create Reservations");
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [menuOpen, setMenuOpen] = useState(false);
   // const [currentPath, setcurrentPath] = useState('/');
 
-  useEffect(() => {
-    console.log("I'm in: ", history.location.pathname);
+  // useEffect(() => {
+  //   console.log("I'm in: ", history.location.pathname);
 
-    switch (history.location.pathname) {
-      case "/reservations":
-        setCurrentAction("Create Reservations");
-        break;
-      case "/reservations/create":
-        setCurrentAction("Reservation List");
-        break;
-      case "/reservation/edit":
-        setCurrentAction("Reservation List");
-        break;
-      case "/contacts":
-        setCurrentAction("Create Contact");
-        break;
-      case "/contacts/create":
-        setCurrentAction("Contacts List");
-        break;
+  //   switch (history.location.pathname) {
+  //     case "/reservations":
+  //       setCurrentAction("Create Reservations");
+  //       break;
+  //     case "/reservations/create":
+  //       setCurrentAction("Reservation List");
+  //       break;
+  //     case "/reservation/edit":
+  //       setCurrentAction("Reservation List");
+  //       break;
+  //     case "/contacts":
+  //       setCurrentAction("Create Contact");
+  //       break;
+  //     case "/contacts/create":
+  //       setCurrentAction("Contacts List");
+  //       break;
 
-      default:
-        break;
-    }
+  //     default:
+  //       break;
+  //   }
 
-    // setcurrentPath(history.location.pathname)
-  }, [history]);
+  //   // setcurrentPath(history.location.pathname)
+  // }, []);
 
   console.log(history);
 
-  const handleChangeViewButton = () => {
-    switch (currentAction) {
-      case "Create Reservations":
-        history.push("/reservations/create");
+  const handleChangeViewButton = (action) => {
+    setMenuOpen(false);
+    switch (action) {
+      case "Create Reservation":
+        history.replace("/reservations/create");
         setCurrentAction("Reservation List");
         console.log("entre");
         break;
       case "Create Contact":
-        history.push("/contacts/create");
+        history.replace("/contacts/create");
         setCurrentAction("Contacts List");
         break;
-      case "Reservation List":
-        history.push("/reservations");
+      case "Reservations List":
+        history.replace("/reservations");
         setCurrentAction("Create Reservations");
         break;
       case "Contacts List":
-        history.push("/contacts");
+        history.replace("/contacts");
         setCurrentAction("Create Contact");
         break;
       default:
         console.log("Default");
         break;
     }
+  };
+
+  const handleClick = (e) => {
+    setAnchorEl(e.target);
+    setMenuOpen(true);
   };
 
   return (
@@ -207,13 +220,47 @@ const Layout = (props) => {
           </Hidden>
           <Hidden smUp>
             <Grid item xs={6} container justify="flex-end">
-              <Button
+              <IconButton
+                aria-controls="simple-menu"
+                aria-haspopup="true"
+                edge="end"
+                className={classes.menuButton}
+                color="inherit"
+                aria-label="menu"
+                onClick={handleClick}
+              >
+                <MenuIcon />
+              </IconButton>
+              <Menu
+                id="simple-menu"
+                anchorEl={anchorEl}
+                keepMounted
+                open={menuOpen}
+                onClose={() => setMenuOpen(false)}
+              >
+                <MenuItem
+                  onClick={() => handleChangeViewButton("Reservations List")}
+                >
+                  Reservation List
+                </MenuItem>
+                <MenuItem
+                  onClick={() => handleChangeViewButton("Contacts List")}
+                >
+                  Contact List
+                </MenuItem>
+                <MenuItem
+                  onClick={() => handleChangeViewButton("Create Reservation")}
+                >
+                  Create Reservation
+                </MenuItem>
+              </Menu>
+              {/* <Button
                 className={classes.button}
                 onClick={handleChangeViewButton}
               >
                 <Typography variant="caption">{currentAction}</Typography>
                 <ArrowRight />
-              </Button>
+              </Button> */}
             </Grid>
           </Hidden>
           <Grid item xs={4}></Grid>
