@@ -260,7 +260,7 @@ const ContactEdit = (props) => {
                     helperText={formick.touched.phone && formick.errors.phone}
                   />
                 </Grid>
-                <Grid container item xs={5} sm={3} justify="flex-end">
+                <Grid container item xs={12} sm={3} justify="flex-end">
                   <TextField
                     className={classes.formControl}
                     id="birthday"

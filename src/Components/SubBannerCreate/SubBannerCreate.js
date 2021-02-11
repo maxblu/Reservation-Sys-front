@@ -7,6 +7,7 @@ import {
   ListItem,
   ListItemText,
   makeStyles,
+  MenuItem,
   Paper,
   SwipeableDrawer,
   Typography,
@@ -105,7 +106,7 @@ const SubBannerCreate = (props) => {
               </Button>
             </Grid>
           </Hidden>
-          {/* <Hidden mdUp>
+          <Hidden mdUp>
             <Button
               className={classes.buttonAction}
               onClick={(e) => setDrawer(true)}
@@ -118,7 +119,21 @@ const SubBannerCreate = (props) => {
               onClose={(e) => setDrawer(false)}
               onOpen={(e) => setDrawer(true)}
             >
-              <List>
+              <MenuItem
+                name="list"
+                onClick={(e) => props.handleChangeViewButton("list")}
+              >
+                List Contacts
+              </MenuItem>
+              <MenuItem
+                name="edit"
+                disabled={props.disabled}
+                onClick={(e) => props.handleChangeViewButton("edit")}
+              >
+                Edit Current Contact
+              </MenuItem>
+
+              {/* <List>
                 <ListItem
                   name="pepe"
                   onClick={(e) => props.handleChangeViewButton(e)}
@@ -139,9 +154,9 @@ const SubBannerCreate = (props) => {
                     </Button>
                   </Grid>
                 </ListItem>
-              </List>
+              </List> */}
             </SwipeableDrawer>
-          </Hidden> */}
+          </Hidden>
         </Grid>
       </Paper>
     </Grid>
