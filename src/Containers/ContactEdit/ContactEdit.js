@@ -112,8 +112,16 @@ const ContactEdit = (props) => {
 
   useEffect(() => {
     const data = props.history.location.state;
-    setAllContactTypes(data.contactTypes);
-    formick.setValues({ ...formick.values, ...data.contact });
+
+    axios
+      .get("/contactType")
+      .then((resp) => {
+        setAllContactTypes(resp.data);
+        formick.setValues({ ...formick.values, ...data.contact });
+      })
+      .catch((e) => {
+        console.log(e.response);
+      });
   }, []);
 
   const handleChangeContactName = (e) => {
@@ -151,21 +159,7 @@ const ContactEdit = (props) => {
       });
   };
 
-  const handleChangeViewButton = (e) => {};
-
-  console.log(formick.errors);
-  if (formick.values.birthday) {
-    console.log(
-      new Date(new Date(formick.values.birthday).toISOString().split("T")[0])
-    );
-    console.log(new Date(formick.values.birthday.split("T")[0]));
-    console.log(
-      format(
-        new Date(new Date(formick.values.birthday).toISOString().split("T")[0]),
-        "yyyy-MM-dd"
-      )
-    );
-  }
+  const handleChangeViewButton = (action) => {};
 
   console.log(serverError);
   return (
@@ -277,16 +271,17 @@ const ContactEdit = (props) => {
                     }}
                     onChange={formick.handleChange}
                     value={
-                      !formick.touched.birthday
-                        ? format(
-                            new Date(
-                              new Date(formick.values.birthday)
-                                .toISOString()
-                                .split("T")[0]
-                            ),
-                            "yyyy-MM-dd"
-                          )
-                        : formick.values.birthday
+                      formick.values.birthday.split("T")[0]
+                      //   formick.touched.birthday
+                      // ? format(
+                      //     new Date(
+                      //       new Date(formick.values.birthday)
+                      //         .toISOString()
+                      //         .split("T")[0]
+                      //     ),
+                      //     "yyyy-MM-dd"
+                      //   )
+                      // : formick.values.birthday
                       //   first
                       //     ? format(
                       //         new Date(formick.values.birthday.split("T")[0]),

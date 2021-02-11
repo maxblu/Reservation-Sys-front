@@ -20,7 +20,7 @@ import {
 import { DataGrid } from "@material-ui/data-grid";
 import axios from "../../axiosInstance";
 import Spinner from "../../Components/Spinner/Spinner";
-import { formatDate } from "../../helpers/helpers";
+
 import { format, set } from "date-fns";
 import SubBanner from "../../Components/SubBanner/SubBanner";
 
@@ -148,13 +148,22 @@ const Contactos = (props) => {
     setOpen(true);
   };
 
-  const handleAction = (action) => {
-    // setOpen(false);
-
+  const handleAction = async (action) => {
     if (action === "delete") {
       console.log(current);
       console.log(contacts[current.id]);
       setWarning(true);
+    }
+    if (action === "edit") {
+      props.history.push("/contact/edit", {
+        contact: {
+          contactId: contacts[current.id].id,
+          contactName: contacts[current.id].name,
+          contactType: contacts[current.id].type,
+          phone: contacts[current.id].phone,
+          birthday: contacts[current.id].birthDate,
+        },
+      });
     }
   };
 
@@ -169,11 +178,20 @@ const Contactos = (props) => {
         const aux = [...contacts];
         aux.splice(current.id, 1);
         setContacts(aux);
+        setWarning(false);
       })
       .catch((er) => {
+        setWarning(false);
+        setLoading(false);
+
         console.log(er.response);
       });
   };
+
+  // const handleNoDelete=()=>{
+  //   setWarning(false);
+  //   setOpen(false)
+  // }
 
   const columns = [
     { field: "id", hide: true, headerName: "Index" },
@@ -264,7 +282,7 @@ const Contactos = (props) => {
                 paddingBottom: "5%",
               }}
             >
-              <Dialog open={open} onClose={handleAction}>
+              <Dialog open={open} onClose={() => setOpen(false)}>
                 {warning ? (
                   <Grid container justify="center">
                     <Grid container item xs={12} justify="center">
@@ -286,7 +304,7 @@ const Contactos = (props) => {
                         className={classes.buttonAction}
                         color="secondary"
                         onClick={() => {
-                          setOpen(false);
+                          setWarning(false);
                         }}
                       >
                         No,Wait!
