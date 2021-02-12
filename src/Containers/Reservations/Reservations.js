@@ -365,7 +365,7 @@ const Reservations = (props) => {
                             className={classes.buttonAction}
                             onClick={(e) => handlerEdit(e, index)}
                           >
-                            Editar
+                            Edit
                           </Button>
                         </Grid>
                       </ListItem>
