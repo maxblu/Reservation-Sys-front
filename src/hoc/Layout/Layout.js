@@ -134,6 +134,16 @@ const Layout = (props) => {
     setMenuOpen(true);
   };
 
+  const handleLanguaje = () => {
+    setMenuOpen(false);
+
+    if (props.i18n.language === "es") {
+      props.i18n.changeLanguage("en");
+    } else {
+      props.i18n.changeLanguage("es");
+    }
+  };
+
   return (
     <React.Fragment>
       <Paper className={classes.mainBanner}>
@@ -270,6 +280,9 @@ const Layout = (props) => {
                   onClick={() => handleChangeViewButton("Create Reservation")}
                 >
                   Create Reservation
+                </MenuItem>
+                <MenuItem onClick={() => handleLanguaje()}>
+                  Change Lenguaje
                 </MenuItem>
               </Menu>
             </Grid>

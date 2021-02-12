@@ -8,9 +8,11 @@ import "./i18n";
 
 ReactDOM.render(
   // <React.StrictMode>
-  <BrowserRouter>
-    <App />
-  </BrowserRouter>,
+  <React.Suspense fallback="loading...">
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </React.Suspense>,
   // </React.StrictMode>,
   document.getElementById("root")
 );
