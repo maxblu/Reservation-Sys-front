@@ -29,6 +29,7 @@ import {
   ArrowForward,
   ArrowForwardIos,
   ArrowRight,
+  Delete,
   Favorite,
 } from "@material-ui/icons";
 import SubBanner from "../../Components/SubBanner/SubBanner";
@@ -81,6 +82,10 @@ const useStyles = makeStyles((theme) => ({
     "&:hover": {
       backgroundColor: "red",
     },
+  },
+  buttonDelete: {
+    color: "red",
+    backgroundColor: "inherit",
   },
 }));
 
@@ -309,14 +314,14 @@ const Reservations = (props) => {
                       className={classes.gridListItem}
                     >
                       <ListItem>
-                        <Grid item xs={5} sm={4} container justify="flex-start">
+                        <Grid item xs={5} sm={3} container justify="flex-start">
                           <ListItemText
                             primary={reser.title}
                             secondary={formatDate(reser.date)}
                           ></ListItemText>
                         </Grid>
                         <Hidden xsDown>
-                          <Grid item sm={4} container justify="center">
+                          <Grid item sm={3} container justify="center">
                             <StarRatingComponent
                               name={index}
                               starCount={5}
@@ -327,7 +332,7 @@ const Reservations = (props) => {
                             />
                           </Grid>
                         </Hidden>
-                        <Grid item xs={5} sm={4} container justify="center">
+                        <Grid item xs={5} sm={3} container justify="center">
                           <IconButton
                             // className={
                             //   reser.isFavorite
@@ -355,7 +360,17 @@ const Reservations = (props) => {
                             />
                           </IconButton>
                         </Grid>
-                        <Grid item xs={2} sm={4} container justify="flex-end">
+                        {/* 
+                        <Grid item xs={1} sm={3} container justify="flex-end">
+                          <IconButton
+                            size="small"
+                            className={classes.buttonDelete}
+                            onClick={(e) => handlerEdit(e, index)}
+                          >
+                            <Delete />
+                          </IconButton>
+                        </Grid> */}
+                        <Grid item xs={2} sm={3} container justify="flex-end">
                           <Button
                             className={classes.buttonAction}
                             onClick={(e) => handlerEdit(e, index)}

@@ -8,6 +8,7 @@ import ReservationForm from "./Containers/ReservationForm/ReservationForm";
 import ReservationEdit from "./Containers/ReservationEdit/ReservationEdit";
 import Contacts from "./Containers/Contacts/Contacs";
 import ContactEdit from "./Containers/ContactEdit/ContactEdit";
+import { Translator, Translate } from "react-auto-translate";
 
 const App = (props) => {
   console.log(props);

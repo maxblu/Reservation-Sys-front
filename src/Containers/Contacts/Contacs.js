@@ -256,25 +256,7 @@ const Contactos = (props) => {
                 </Grid>
               </Grid>
             </List>
-            {/* <Grid item container justify="center">
-          <IconButton
-          disabled={pageData.pageNumber <= 1}
-          onClick={(e) => {
-            handlePagination(e, false);
-          }}
-          >
-          <ArrowBackIos />
-          </IconButton>
-          <ListItemText primary={pageData.pageNumber} />
-          <IconButton
-          disabled={pageData.pageNumber > pageData.totalPages}
-          onClick={(e) => {
-            handlePagination(e, true);
-          }}
-          >
-          <ArrowForwardIos />
-          </IconButton>
-        </Grid> */}
+
             <Grid
               item
               container

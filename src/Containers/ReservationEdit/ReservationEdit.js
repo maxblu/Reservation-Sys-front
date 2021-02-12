@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "../../axiosInstance";
 import {
   Button,
+  Dialog,
+  DialogTitle,
   FormControl,
   Grid,
   Hidden,
@@ -56,6 +58,7 @@ const ReservationEdit = (props) => {
   const classes = useStyles();
   const [reservation, setReservation] = useState();
   const [allContactTypes, setAllContactTypes] = useState([]);
+  const [del, setDel] = useState();
 
   useEffect(() => {
     const data = props.history.location.state.reservation;
@@ -247,6 +250,19 @@ const ReservationEdit = (props) => {
 
   const handleChangeViewButton = () => {
     props.history.push("/Reservations");
+  };
+
+  const handleDeleteClick = () => {
+    formick.setValues({ ...formick.values, loading: true });
+
+    axios
+      .delete(`/reservation/${reservation.reservationId}`)
+      .then((resp) => {
+        props.history.replace("/reservation");
+      })
+      .catch((e) => {
+        console.log(e.response);
+      });
   };
 
   return (
@@ -448,16 +464,56 @@ const ReservationEdit = (props) => {
                   ></CKEditor>
                   {/* </Paper> */}
                 </Grid>
-                <Hidden xsDown>
-                  <Button
-                    disabled={!formick.isValid}
-                    className={classes.buttomSend}
-                    type="submit"
-                  >
-                    Send
-                  </Button>
-                </Hidden>
-                <Hidden smUp>
+                {/* <Hidden xsDown> */}
+                <Button
+                  disabled={!formick.isValid}
+                  className={classes.buttomSend}
+                  type="submit"
+                >
+                  Edit
+                </Button>
+                {/* </Hidden> */}
+                {/* <Hidden xsDown> */}
+                <Button
+                  disabled={!formick.isValid}
+                  className={classes.buttomSend}
+                  onClick={() => setDel(true)}
+                >
+                  Delete
+                </Button>
+                {del && (
+                  <Dialog open={del} onClose={() => setDel(false)}>
+                    <Grid container justify="center">
+                      <Grid container item xs={12} justify="center">
+                        <DialogTitle>
+                          Are you sure this can't be undone
+                        </DialogTitle>
+                      </Grid>
+                      <Grid container item xs={4} justify="flex-start">
+                        <Button
+                          className={classes.buttonAction}
+                          color="secondary"
+                          onClick={handleDeleteClick}
+                        >
+                          Yes,Delete
+                        </Button>
+                      </Grid>
+                      <Grid container item xs={4} justify="flex-end">
+                        <Button
+                          className={classes.buttonAction}
+                          color="secondary"
+                          onClick={() => {
+                            setDel(false);
+                          }}
+                        >
+                          No,Wait!
+                        </Button>
+                      </Grid>
+                    </Grid>
+                  </Dialog>
+                )}
+                {/* </Hidden> */}
+                {/* <Hidden smUp>
                   <Button
                     disabled={!formick.isValid}
                     className={classes.buttomSend}
@@ -468,7 +524,7 @@ const ReservationEdit = (props) => {
                   >
                     Send
                   </Button>
-                </Hidden>
+                </Hidden> */}
               </Grid>
             </form>
           )}
