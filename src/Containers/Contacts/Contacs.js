@@ -172,6 +172,7 @@ const Contactos = (props) => {
   return (
     <Grid container justify="center">
       <SubBanner
+        t={props.t}
         nextAction="List Reservations"
         currentAction="Contact List"
         handleChangeViewButton={handleChangeViewButton}

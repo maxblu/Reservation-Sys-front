@@ -67,7 +67,7 @@ const SubBannerCreate = (props) => {
         >
           <Grid container item xs={12} sm={4} justify="flex-start">
             <Typography variant="h5" color="error" align="left">
-              {props.currentAction}
+              {props.t(props.currentAction)}
             </Typography>
           </Grid>
           <Grid
@@ -92,7 +92,7 @@ const SubBannerCreate = (props) => {
                 className={classes.buttonAction}
                 onClick={(e) => props.handleChangeViewButton("list")}
               >
-                List Contacts
+                {props.t("List Contacts")}
               </Button>
             </Grid>
             <Grid container item xs={6} justify="space-around">
@@ -102,7 +102,7 @@ const SubBannerCreate = (props) => {
                 className={classes.buttonAction}
                 onClick={() => props.handleChangeViewButton("edit")}
               >
-                Edit Contact
+                {props.t("Edit Contact")}
               </Button>
             </Grid>
           </Hidden>
@@ -111,7 +111,7 @@ const SubBannerCreate = (props) => {
               className={classes.buttonAction}
               onClick={(e) => setDrawer(true)}
             >
-              Aditional Actions
+              {props.t("Aditional Actions")}
             </Button>
             <SwipeableDrawer
               anchor="top"
@@ -123,38 +123,15 @@ const SubBannerCreate = (props) => {
                 name="list"
                 onClick={(e) => props.handleChangeViewButton("list")}
               >
-                List Contacts
+                {props.t("List Contacts")}
               </MenuItem>
               <MenuItem
                 name="edit"
                 disabled={props.disabled}
                 onClick={(e) => props.handleChangeViewButton("edit")}
               >
-                Edit Current Contact
+                {props.t("Edit Current Contact")}
               </MenuItem>
-
-              {/* <List>
-                <ListItem
-                  name="pepe"
-                  onClick={(e) => props.handleChangeViewButton(e)}
-                >
-                  <Grid container justify="center">
-                    <ListItemText>List Contacts</ListItemText>
-                  </Grid>
-                </ListItem>
-                <ListItem>
-                  <Grid container justify="center">
-                    <Button
-                      name="edit"
-                      disabled={props.block}
-                      className={classes.buttonAction}
-                      onClick={(e) => props.handleChangeViewButton(e)}
-                    >
-                      Edit Contact
-                    </Button>
-                  </Grid>
-                </ListItem>
-              </List> */}
             </SwipeableDrawer>
           </Hidden>
         </Grid>

@@ -32,7 +32,11 @@ const App = (props) => {
         <Translate> */}
       <Layout t={t} i18n={i18n}>
         <Switch>
-          <Route path="/Contacts" exact component={Contacts} />
+          <Route
+            path="/Contacts"
+            exact
+            render={(props) => <Contacts {...props} t={t} i18n={i18n} />}
+          />
           <Route
             path="/Reservations"
             exact
@@ -41,14 +45,17 @@ const App = (props) => {
           <Route
             path="/Reservations/Create"
             exact
-            component={ReservationForm}
+            render={(props) => <ReservationForm {...props} t={t} i18n={i18n} />}
           ></Route>
           <Route
             path="/Reservation/edit"
             exact
-            component={ReservationEdit}
+            render={(props) => <ReservationEdit {...props} t={t} i18n={i18n} />}
           ></Route>
-          <Route path="/Contact/edit" component={ContactEdit} />
+          <Route
+            path="/Contact/edit"
+            render={(props) => <ContactEdit {...props} t={t} i18n={i18n} />}
+          ></Route>
           <Redirect from="/" to="Reservations" />
         </Switch>
       </Layout>
