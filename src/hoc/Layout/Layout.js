@@ -7,25 +7,19 @@ import {
   makeStyles,
   Grid,
   Hidden,
-  withStyles,
-  Button,
-  Card,
-  CardContent,
   Menu,
   MenuItem,
   IconButton,
 } from "@material-ui/core";
 
 import MenuIcon from "@material-ui/icons/Menu";
-import { ArrowRight } from "@material-ui/icons";
-import "./Layout.css";
 
 const useStyles = makeStyles((theme) => ({
   mainBanner: {
     position: "relative",
     backgroundColor: theme.palette.grey[800],
     color: theme.palette.common.white,
-    backgroundImage: "url(https://unsplash.com/photos/fdDFCnUOleg)",
+    backgroundImage: "url(https://source.unsplash.com/random)",
     backgroundSize: "cover",
     backgroundRepeat: "no-repeat",
     backgroundPosition: "center",
