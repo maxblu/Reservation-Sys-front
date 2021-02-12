@@ -1,3 +1,5 @@
+import React from "react";
+
 import {
   Button,
   Grid,
@@ -6,13 +8,10 @@ import {
   Paper,
   Typography,
 } from "@material-ui/core";
-import React from "react";
 
 const useStyles = makeStyles((theme) => ({
   subHeader: {
     width: "100%",
-
-    //  textAlign:"center"
   },
   subHeaderMovil: {
     width: "100%",
@@ -57,7 +56,7 @@ const SubBanner = (props) => {
         >
           <Grid container item xs={12} sm={2} justify="center">
             <Typography variant="h5" color="error" align="left">
-              {props.currentAction}
+              {props.t(props.currentAction)}
             </Typography>
           </Grid>
           <Grid
@@ -82,7 +81,7 @@ const SubBanner = (props) => {
                 className={classes.buttonAction}
                 onClick={(e) => props.handleChangeViewButton(e)}
               >
-                {props.nextAction}
+                {props.t(props.nextAction)}
               </Button>
             </Grid>
           </Hidden>

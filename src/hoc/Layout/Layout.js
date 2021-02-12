@@ -7,18 +7,12 @@ import {
   makeStyles,
   Grid,
   Hidden,
-  withStyles,
-  Button,
-  Card,
-  CardContent,
   Menu,
   MenuItem,
   IconButton,
 } from "@material-ui/core";
 
 import MenuIcon from "@material-ui/icons/Menu";
-import { ArrowRight } from "@material-ui/icons";
-import "./Layout.css";
 
 const useStyles = makeStyles((theme) => ({
   mainBanner: {
@@ -96,10 +90,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+/*
+Layoout to wrap the app. The contains navigation for mocil version.
+Is the main Banner with de ISUcorp 
+
+*/
+
 const Layout = (props) => {
   const classes = useStyles();
   const history = useHistory();
-  const [currentAction, setCurrentAction] = useState("Create Reservations");
+  // const [currentAction, setCurrentAction] = useState("Create Reservations");
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -108,20 +108,20 @@ const Layout = (props) => {
     switch (action) {
       case "Create Reservation":
         history.replace("/reservations/create");
-        setCurrentAction("Reservation List");
+
         console.log("entre");
         break;
       case "Create Contact":
         history.replace("/contacts/create");
-        setCurrentAction("Contacts List");
+
         break;
       case "Reservations List":
         history.replace("/reservations");
-        setCurrentAction("Create Reservations");
+
         break;
       case "Contacts List":
         history.replace("/contacts");
-        setCurrentAction("Create Contact");
+
         break;
       default:
         console.log("Default");
@@ -132,6 +132,16 @@ const Layout = (props) => {
   const handleClick = (e) => {
     setAnchorEl(e.target);
     setMenuOpen(true);
+  };
+
+  const handleLanguaje = () => {
+    setMenuOpen(false);
+
+    if (props.i18n.language === "es") {
+      props.i18n.changeLanguage("en");
+    } else {
+      props.i18n.changeLanguage("es");
+    }
   };
 
   return (
@@ -271,14 +281,10 @@ const Layout = (props) => {
                 >
                   Create Reservation
                 </MenuItem>
+                <MenuItem onClick={() => handleLanguaje()}>
+                  Change Lenguaje
+                </MenuItem>
               </Menu>
-              {/* <Button
-                className={classes.button}
-                onClick={handleChangeViewButton}
-              >
-                <Typography variant="caption">{currentAction}</Typography>
-                <ArrowRight />
-              </Button> */}
             </Grid>
           </Hidden>
           <Grid item xs={4}></Grid>
