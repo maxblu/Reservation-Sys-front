@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
     position: "relative",
     backgroundColor: theme.palette.grey[800],
     color: theme.palette.common.white,
-    backgroundImage: "url(https://source.unsplash.com/random)",
+    backgroundImage: "url(https://unsplash.com/photos/fdDFCnUOleg)",
     backgroundSize: "cover",
     backgroundRepeat: "no-repeat",
     backgroundPosition: "center",
@@ -96,10 +96,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+/*
+Layoout to wrap the app. The contains navigation for mocil version.
+Is the main Banner with de ISUcorp 
+
+*/
+
 const Layout = (props) => {
   const classes = useStyles();
   const history = useHistory();
-  const [currentAction, setCurrentAction] = useState("Create Reservations");
+  // const [currentAction, setCurrentAction] = useState("Create Reservations");
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -108,20 +114,20 @@ const Layout = (props) => {
     switch (action) {
       case "Create Reservation":
         history.replace("/reservations/create");
-        setCurrentAction("Reservation List");
+
         console.log("entre");
         break;
       case "Create Contact":
         history.replace("/contacts/create");
-        setCurrentAction("Contacts List");
+
         break;
       case "Reservations List":
         history.replace("/reservations");
-        setCurrentAction("Create Reservations");
+
         break;
       case "Contacts List":
         history.replace("/contacts");
-        setCurrentAction("Create Contact");
+
         break;
       default:
         console.log("Default");
@@ -272,13 +278,6 @@ const Layout = (props) => {
                   Create Reservation
                 </MenuItem>
               </Menu>
-              {/* <Button
-                className={classes.button}
-                onClick={handleChangeViewButton}
-              >
-                <Typography variant="caption">{currentAction}</Typography>
-                <ArrowRight />
-              </Button> */}
             </Grid>
           </Hidden>
           <Grid item xs={4}></Grid>

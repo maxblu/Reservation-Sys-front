@@ -49,6 +49,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+/**
+ *  Contact edit form is for edit contacts
+ *  You get here when editing in the contact list or
+ *  when creating a new reservation a existing contact is selected
+ *  this form is also validate like the  others
+ *
+ *
+ */
+
 const ContactEdit = (props) => {
   const classes = useStyles();
   const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
@@ -303,17 +312,12 @@ const ContactEdit = (props) => {
                   />
                 </Grid>
                 <Hidden xsDown>
-                  <Button
-                    // disabled={!formick.isValid}
-                    className={classes.buttomSend}
-                    type="submit"
-                  >
+                  <Button className={classes.buttomSend} type="submit">
                     Send
                   </Button>
                 </Hidden>
                 <Hidden smUp>
                   <Button
-                    // disabled={!formick.isValid}
                     className={classes.buttomSend}
                     style={{
                       width: "100%",

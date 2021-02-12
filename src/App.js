@@ -10,6 +10,11 @@ import Contacts from "./Containers/Contacts/Contacs";
 import ContactEdit from "./Containers/ContactEdit/ContactEdit";
 import { Translator, Translate } from "react-auto-translate";
 
+/*
+Entry point of the app with the react Router Swithc for managing 
+routes in funtion of the pathname
+*/
+
 const App = (props) => {
   console.log(props);
 

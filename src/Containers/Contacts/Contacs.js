@@ -37,10 +37,15 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     backgroundColor: "#f7f7f7",
     marginBottom: theme.spacing(2),
-    // marginLeft:theme.spacing(2),
-    // marginRight:theme.spacing(2),
   },
 }));
+
+/**
+ * This componet renders all contacts in a table with pagination on server side
+ * using the same page data object. Also the table is sortable searchable etc.
+ * The cells are selectable for deleting or editing a contact.
+ *
+ */
 
 const Contactos = (props) => {
   const [contacts, setContacts] = useState([]);
@@ -48,7 +53,6 @@ const Contactos = (props) => {
   const [open, setOpen] = useState(false);
   const [current, setCurrent] = useState();
   const [warning, setWarning] = useState();
-  // const [page, setPage] = React.useState(1);
 
   const classes = useStyles();
 
@@ -65,14 +69,12 @@ const Contactos = (props) => {
 
   useEffect(() => {
     setLoading(true);
-    // console.log("Llame a esto");
 
     axios
       .get(
         `/Contact/?pageNumber=${pageData.pageNumber}&pageSize=${pageData.pageSize}`
       )
       .then((res) => {
-        console.log(res.data);
         setLoading(false);
         setContacts(res.data.data);
         setPageData({
@@ -174,7 +176,7 @@ const Contactos = (props) => {
         currentAction="Contact List"
         handleChangeViewButton={handleChangeViewButton}
       />
-      {/* <Paper> */}
+
       {loading ? (
         <Spinner />
       ) : (
@@ -272,7 +274,6 @@ const Contactos = (props) => {
           </Grid>
         </Grid>
       )}
-      {/* </Paper> */}
     </Grid>
   );
 };
