@@ -286,6 +286,7 @@ const ReservationForm = (props) => {
   return (
     <React.Fragment>
       <SubBannerCreate
+        t={props.t}
         disabled={!inputs.block}
         nextAction="List Reservation"
         currentAction="Create Reservation"

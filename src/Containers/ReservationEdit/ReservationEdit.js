@@ -274,6 +274,7 @@ const ReservationEdit = (props) => {
   return (
     <React.Fragment>
       <SubBanner
+        t={props.t}
         nextAction="List Reservation"
         currentAction="Edit Reservation"
         handleChangeViewButton={handleChangeViewButton}

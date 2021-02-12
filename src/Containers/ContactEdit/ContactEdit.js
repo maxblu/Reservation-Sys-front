@@ -193,6 +193,7 @@ const ContactEdit = (props) => {
   return (
     <React.Fragment>
       <SubBanner
+        t={props.t}
         nextAction="Go Back"
         currentAction="Edit Reservation"
         handleChangeViewButton={handleChangeViewButton}

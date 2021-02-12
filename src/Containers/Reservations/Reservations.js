@@ -348,7 +348,7 @@ const Reservations = (props) => {
                                   : classes.favoriteTextDisable
                               }
                             >
-                              Add Favorites
+                              {props.t("Add Favorites")}
                             </Typography>
                             <Favorite
                               className={
@@ -365,7 +365,7 @@ const Reservations = (props) => {
                             className={classes.buttonAction}
                             onClick={(e) => handlerEdit(e, index)}
                           >
-                            Editar
+                            {props.t("Edit")}
                           </Button>
                         </Grid>
                       </ListItem>
