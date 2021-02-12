@@ -32,6 +32,7 @@ const resources = {
       "Edit Current Contact": "Editar contacto selecionado",
       "Aditional Actions": "Aciones adicionales",
       "Change Languaje": "Cambiar idioma",
+      "Go Back": "Ir Atrás",
     },
   },
   en: {

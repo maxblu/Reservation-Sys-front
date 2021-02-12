@@ -195,7 +195,7 @@ const ContactEdit = (props) => {
       <SubBanner
         t={props.t}
         nextAction="Go Back"
-        currentAction="Edit Reservation"
+        currentAction="Edit Contact"
         handleChangeViewButton={handleChangeViewButton}
       />
       <Paper>
@@ -314,7 +314,7 @@ const ContactEdit = (props) => {
                 </Grid>
                 <Hidden xsDown>
                   <Button className={classes.buttomSend} type="submit">
-                    Send
+                    Edit
                   </Button>
                 </Hidden>
                 <Hidden smUp>
