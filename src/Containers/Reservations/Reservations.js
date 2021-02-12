@@ -240,6 +240,7 @@ const Reservations = (props) => {
   return (
     <React.Fragment>
       <SubBanner
+        t={props.t}
         nextAction="Create Reservation"
         currentAction="Reservation List"
         handleChangeViewButton={handleChangeViewButton}
@@ -249,7 +250,9 @@ const Reservations = (props) => {
           <Grid item xs={12} container justify="flex-start">
             <Hidden xsDown>
               <FormControl variant="filled" className={classes.formControl}>
-                <InputLabel id="select-filled-label">Sort by</InputLabel>
+                <InputLabel id="select-filled-label">
+                  {props.t("Sort by")}
+                </InputLabel>
                 <Select
                   name="sort"
                   value={currentOrder}
@@ -276,19 +279,25 @@ const Reservations = (props) => {
                 variant="filled"
                 className={classes.formControlMovil}
               >
-                <InputLabel id="select-filled-label">Sort By </InputLabel>
+                <InputLabel id="select-filled-label">
+                  {props.t("Sort by")}
+                </InputLabel>
                 <Select value={""} onChange={handleSort} variant="outlined">
-                  <MenuItem value={"Date asc"}> Date Ascending </MenuItem>
-                  <MenuItem value={"Date dsc"}> Date Descending </MenuItem>
-                  <MenuItem value={"Title asc"}>
+                  <MenuItem value={"Date asc"}>
                     {" "}
-                    Alphabetic Ascending{" "}
+                    {props.t("Date Ascending")}
+                  </MenuItem>
+                  <MenuItem value={"Date dsc"}>
+                    {" "}
+                    {props.t("Date Descending")}{" "}
+                  </MenuItem>
+                  <MenuItem value={"Title asc"}>
+                    {props.t("Alphabetic Ascending")}
                   </MenuItem>
                   <MenuItem value={"Title dsc"}>
-                    {" "}
-                    Alphabetic Descending{" "}
+                    {props.t("Alphabetic Descending")}
                   </MenuItem>
-                  <MenuItem value={"Ranking"}> Ranking </MenuItem>
+                  <MenuItem value={"Ranking"}> {props.t("Ranking")} </MenuItem>
                 </Select>
               </FormControl>
               `
@@ -339,7 +348,7 @@ const Reservations = (props) => {
                                   : classes.favoriteTextDisable
                               }
                             >
-                              Add Favorites
+                              {props.t("Add Favorites")}
                             </Typography>
                             <Favorite
                               className={
@@ -356,7 +365,7 @@ const Reservations = (props) => {
                             className={classes.buttonAction}
                             onClick={(e) => handlerEdit(e, index)}
                           >
-                            Editar
+                            {props.t("Edit")}
                           </Button>
                         </Grid>
                       </ListItem>

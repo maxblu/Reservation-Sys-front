@@ -13,6 +13,7 @@ import {
 } from "@material-ui/core";
 
 import MenuIcon from "@material-ui/icons/Menu";
+import { Language } from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => ({
   mainBanner: {
@@ -88,6 +89,11 @@ const useStyles = makeStyles((theme) => ({
   navigation: {
     marginBottom: "4%",
   },
+  menuButtonLanguaje: {
+    position: "absolute",
+    top: "10%",
+    right: "5%",
+  },
 }));
 
 /*
@@ -132,6 +138,16 @@ const Layout = (props) => {
   const handleClick = (e) => {
     setAnchorEl(e.target);
     setMenuOpen(true);
+  };
+
+  const handleLanguaje = () => {
+    setMenuOpen(false);
+
+    if (props.i18n.language === "es") {
+      props.i18n.changeLanguage("en");
+    } else {
+      props.i18n.changeLanguage("es");
+    }
   };
 
   return (
@@ -259,22 +275,55 @@ const Layout = (props) => {
                 <MenuItem
                   onClick={() => handleChangeViewButton("Reservations List")}
                 >
-                  Reservation List
+                  {props.t("Reservation List")}
                 </MenuItem>
                 <MenuItem
                   onClick={() => handleChangeViewButton("Contacts List")}
                 >
-                  Contact List
+                  {props.t("Contact List")}
                 </MenuItem>
                 <MenuItem
                   onClick={() => handleChangeViewButton("Create Reservation")}
                 >
-                  Create Reservation
+                  {props.t("Create Reservation")}
+                </MenuItem>
+                <MenuItem onClick={() => handleLanguaje()}>
+                  {props.t("Change Languaje")}
                 </MenuItem>
               </Menu>
             </Grid>
           </Hidden>
-          <Grid item xs={4}></Grid>
+          <Hidden smDown>
+            <Grid
+              item
+              xs={1}
+              className={classes.navigation}
+              container
+              justify="flex-end"
+            >
+              <IconButton
+                aria-controls="simple-menu"
+                aria-haspopup="true"
+                edge="end"
+                className={classes.menuButtonLanguaje}
+                color="inherit"
+                aria-label="menu"
+                onClick={handleClick}
+              >
+                <Language />
+              </IconButton>
+              <Menu
+                id="simple-menu"
+                anchorEl={anchorEl}
+                keepMounted
+                open={menuOpen}
+                onClose={() => setMenuOpen(false)}
+              >
+                <MenuItem onClick={() => handleLanguaje()}>Spanish</MenuItem>
+                <MenuItem onClick={() => handleLanguaje()}>English</MenuItem>
+              </Menu>
+            </Grid>
+          </Hidden>
         </Grid>
       </Paper>
 
