@@ -32,6 +32,7 @@ import {
   Delete,
   Favorite,
 } from "@material-ui/icons";
+import Pagination from "@material-ui/lab/Pagination";
 import SubBanner from "../../Components/SubBanner/SubBanner";
 
 const useStyles = makeStyles((theme) => ({
@@ -86,6 +87,10 @@ const useStyles = makeStyles((theme) => ({
   buttonDelete: {
     color: "red",
     backgroundColor: "inherit",
+  },
+  pagination: {
+    marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(4),
   },
 }));
 
@@ -164,14 +169,12 @@ const Reservations = (props) => {
       });
   };
 
-  const handlePagination = (e, direct) => {
+  const handlePagination = (e, page) => {
+    // console.log("", direct);
+
     setLoading(true);
     axios
-      .get(
-        `/Reservation/?pageNumber=${
-          direct ? pageData.pageNumber + 1 : pageData.pageNumber - 1
-        }`
-      )
+      .get(`/Reservation/?pageNumber=${page}`)
       .then((res) => {
         console.log(res.data);
         setLoading(false);
@@ -384,8 +387,13 @@ const Reservations = (props) => {
                 })
               )}
             </List>
-            <Grid item container justify="center">
-              <IconButton
+            <Grid
+              item
+              container
+              justify="flex-start"
+              className={classes.pagination}
+            >
+              {/* <IconButton
                 disabled={pageData.pageNumber <= 1}
                 onClick={(e) => {
                   handlePagination(e, false);
@@ -401,7 +409,15 @@ const Reservations = (props) => {
                 }}
               >
                 <ArrowForwardIos />
-              </IconButton>
+              </IconButton> */}
+              <Pagination
+                className={classes.pagination}
+                count={pageData.totalPages}
+                page={pageData.pageNumber}
+                variant="outlined"
+                onChange={handlePagination}
+                shape="rounded"
+              />
             </Grid>
 
             {/* <Grid

@@ -44,7 +44,14 @@ const useStyles = makeStyles((theme) => ({
       color: "white",
     },
   },
-
+  buttonAction: {
+    color: "white",
+    marginBottom: "3%",
+    backgroundColor: " rgb(173, 173, 173)",
+    "&:hover": {
+      backgroundColor: "red",
+    },
+  },
   editor: {
     width: "99%",
     marginLeft: ".5%",
@@ -376,13 +383,14 @@ const ReservationEdit = (props) => {
                     onChange={formick.handleChange}
                     value={
                       // formick.values.birthday
-                      formick.values.block
-                        ? formick.values.birthday &&
-                          format(
-                            new Date(formick.values.birthday),
-                            "yyyy-MM-dd"
-                          )
-                        : formick.values.birthday
+                      formick.values.birthday.split("T")[0]
+                      // formick.values.block
+                      //   ? formick.values.birthday &&
+                      //     format(
+                      //       new Date(formick.values.birthday),
+                      //       "yyyy-MM-dd"
+                      //     )
+                      //   : formick.values.birthday
                     }
                     InputLabelProps={{
                       shrink: true,
@@ -466,7 +474,7 @@ const ReservationEdit = (props) => {
                 </Grid>
                 {/* <Hidden xsDown> */}
                 <Button
-                  disabled={!formick.isValid}
+                  // disabled={!formick.isValid}
                   className={classes.buttomSend}
                   type="submit"
                 >
@@ -475,7 +483,6 @@ const ReservationEdit = (props) => {
                 {/* </Hidden> */}
                 {/* <Hidden xsDown> */}
                 <Button
-                  disabled={!formick.isValid}
                   className={classes.buttomSend}
                   onClick={() => setDel(true)}
                 >

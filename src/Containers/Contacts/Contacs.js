@@ -54,7 +54,7 @@ const Contactos = (props) => {
 
   const [pageData, setPageData] = useState({
     pageNumber: 1,
-    pageSize: 2,
+    pageSize: 5,
     firstPage: null,
     lastPage: null,
     totalPages: 0,
@@ -97,50 +97,6 @@ const Contactos = (props) => {
       pageNumber: params.page,
     });
   };
-  // React.useEffect(() => {
-  //   let active = true;
-
-  //   (async () => {
-  //     setLoading(true);
-  //     const newRows = await loadServerRows(page, data);
-
-  //     if (!active) {
-  //       return;
-  //     }
-
-  //     setRows(newRows);
-  //     setLoading(false);
-  //   })();
-
-  //   return () => {
-  //     active = false;
-  //   };
-  // }, [page, data]);
-
-  // const handlePagination = (params) => {
-  //   // console.log("safwdsfgasgagaw", e);
-
-  //   axios
-  //     .get(`/Contact/?pageNumber=${params.page}`)
-  //     .then((res) => {
-  //       console.log(res.data);
-  //       setContacts(res.data.data);
-  //       setPageData({
-  //         ...pageData,
-  //         pageSize: res.data.pageSize,
-  //         pageNumber: res.data.pageNumber,
-  //         lastPage: res.data.lastPage,
-  //         totalPages: res.data.totalPages,
-  //         totalRecords: res.data.totalRecords,
-  //         nextPage: res.data.nextPage,
-  //         previousPage: res.data.previousPage,
-  //       });
-  //     })
-  //     .catch((e) => {
-  //       console.log(e);
-  //       // setLoading(false);
-  //     });
-  // };
 
   const handleSelection = (params) => {
     console.log(params.data);
@@ -189,11 +145,6 @@ const Contactos = (props) => {
       });
   };
 
-  // const handleNoDelete=()=>{
-  //   setWarning(false);
-  //   setOpen(false)
-  // }
-
   const columns = [
     { field: "id", hide: true, headerName: "Index" },
     { field: "contactName", headerName: "Contact Name", flex: 1 },
@@ -227,110 +178,98 @@ const Contactos = (props) => {
       {loading ? (
         <Spinner />
       ) : (
-        <Grid item xs={12} container justify="flex-start">
-          <Grid item xs={12} sm={11}>
-            <List>
+        <Grid item xs={12} container>
+          <Grid item xs={12} sm={12} container justify="center">
+            <Paper style={{ width: "100%" }}>
+              <List>
+                <Grid
+                  item
+                  container
+                  justify="center"
+                  className={classes.gridListItem}
+                >
+                  <Grid
+                    item
+                    xs={12}
+                    sm={12}
+                    style={{ height: 400, width: "100%" }}
+                  >
+                    <DataGrid
+                      rows={rows}
+                      columns={columns}
+                      pagination={true}
+                      rowCount={pageData.totalRecords}
+                      pageSize={pageData.pageSize}
+                      page={pageData.pageNumber}
+                      rowsPerPageOptions={[3, 5, 10]}
+                      onPageSizeChange={(params) => {
+                        setPageData({ ...pageData, pageSize: params.pageSize });
+                      }}
+                      paginationMode="server"
+                      onPageChange={handlePage}
+                      loading={loading}
+                      onRowSelected={(params) => handleSelection(params)}
+                    ></DataGrid>
+                  </Grid>
+                </Grid>
+              </List>
+
               <Grid
                 item
                 container
-                justify="center"
-                className={classes.gridListItem}
-              >
-                <Grid item xs={12} sm={12} style={{ height: 400 }}>
-                  <DataGrid
-                    rows={rows}
-                    columns={columns}
-                    pagination={true}
-                    rowCount={pageData.totalRecords}
-                    pageSize={pageData.pageSize}
-                    page={pageData.pageNumber}
-                    rowsPerPageOptions={[2, 4, 5]}
-                    onPageSizeChange={(params) => {
-                      setPageData({ ...pageData, pageSize: params.pageSize });
-                    }}
-                    paginationMode="server"
-                    onPageChange={handlePage}
-                    loading={loading}
-                    onRowSelected={(params) => handleSelection(params)}
-                  ></DataGrid>
-                </Grid>
-              </Grid>
-            </List>
-
-            <Grid
-              item
-              container
-              justify="space-around"
-              style={{
-                paddingBottom: "5%",
-              }}
-            >
-              <Dialog open={open} onClose={() => setOpen(false)}>
-                {warning ? (
-                  <Grid container justify="center">
-                    <Grid container item xs={12} justify="center">
-                      <DialogTitle>
-                        Are you sure this can't be undone
-                      </DialogTitle>
-                    </Grid>
-                    <Grid container item xs={4} justify="flex-start">
-                      <Button
-                        className={classes.buttonAction}
-                        color="secondary"
-                        onClick={handleDelete}
-                      >
-                        Yes,Delete
-                      </Button>
-                    </Grid>
-                    <Grid container item xs={4} justify="flex-end">
-                      <Button
-                        className={classes.buttonAction}
-                        color="secondary"
-                        onClick={() => {
-                          setWarning(false);
-                        }}
-                      >
-                        No,Wait!
-                      </Button>
-                    </Grid>
-                  </Grid>
-                ) : (
-                  <React.Fragment>
-                    <DialogTitle>
-                      What do you want to do with this contact
-                    </DialogTitle>
-                    <List>
-                      <ListItem button onClick={() => handleAction("edit")}>
-                        <ListItemText primary="Edit"></ListItemText>
-                      </ListItem>
-                      <ListItem button onClick={() => handleAction("delete")}>
-                        <ListItemText primary="Delete"></ListItemText>
-                      </ListItem>
-                    </List>
-                  </React.Fragment>
-                )}
-              </Dialog>
-            </Grid>
-          </Grid>
-          <Hidden smDown>
-            <Grid
-              item
-              container
-              justify="space-around"
-              style={{
-                paddingBottom: "5%",
-              }}
-            >
-              <Button
-                className={classes.buttonAction}
-                onClick={(e) => {
-                  props.history.push("/reservations");
+                justify="space-around"
+                style={{
+                  paddingBottom: "5%",
                 }}
               >
-                Reservation List
-              </Button>
-            </Grid>
-          </Hidden>
+                <Dialog open={open} onClose={() => setOpen(false)}>
+                  {warning ? (
+                    <Grid container justify="center">
+                      <Grid container item xs={12} justify="center">
+                        <DialogTitle>
+                          Are you sure this can't be undone
+                        </DialogTitle>
+                      </Grid>
+                      <Grid container item xs={4} justify="flex-start">
+                        <Button
+                          className={classes.buttonAction}
+                          color="secondary"
+                          onClick={handleDelete}
+                        >
+                          Yes,Delete
+                        </Button>
+                      </Grid>
+                      <Grid container item xs={4} justify="flex-end">
+                        <Button
+                          className={classes.buttonAction}
+                          color="secondary"
+                          onClick={() => {
+                            setWarning(false);
+                          }}
+                        >
+                          No,Wait!
+                        </Button>
+                      </Grid>
+                    </Grid>
+                  ) : (
+                    <React.Fragment>
+                      <DialogTitle>
+                        What do you want to do with this contact
+                      </DialogTitle>
+                      <List>
+                        <ListItem button onClick={() => handleAction("edit")}>
+                          <ListItemText primary="Edit"></ListItemText>
+                        </ListItem>
+                        <ListItem button onClick={() => handleAction("delete")}>
+                          <ListItemText primary="Delete"></ListItemText>
+                        </ListItem>
+                      </List>
+                    </React.Fragment>
+                  )}
+                </Dialog>
+              </Grid>
+            </Paper>
+          </Grid>
         </Grid>
       )}
       {/* </Paper> */}

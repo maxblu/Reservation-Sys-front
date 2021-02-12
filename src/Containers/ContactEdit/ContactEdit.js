@@ -289,28 +289,7 @@ const ContactEdit = (props) => {
                       });
                     }}
                     onChange={formick.handleChange}
-                    value={
-                      formick.values.birthday.split("T")[0]
-                      //   formick.touched.birthday
-                      // ? format(
-                      //     new Date(
-                      //       new Date(formick.values.birthday)
-                      //         .toISOString()
-                      //         .split("T")[0]
-                      //     ),
-                      //     "yyyy-MM-dd"
-                      //   )
-                      // : formick.values.birthday
-                      //   first
-                      //     ? format(
-                      //         new Date(formick.values.birthday.split("T")[0]),
-                      //         "yyyy-MM-dd"
-                      //       )
-                      //     : formick.values.birthday
-                      // :
-                      //   formick.touched.birthday
-                      // ? formick.values.birthday
-                    }
+                    value={formick.values.birthday.split("T")[0]}
                     InputLabelProps={{
                       shrink: true,
                     }}
@@ -325,7 +304,7 @@ const ContactEdit = (props) => {
                 </Grid>
                 <Hidden xsDown>
                   <Button
-                    disabled={!formick.isValid}
+                    // disabled={!formick.isValid}
                     className={classes.buttomSend}
                     type="submit"
                   >
@@ -334,7 +313,7 @@ const ContactEdit = (props) => {
                 </Hidden>
                 <Hidden smUp>
                   <Button
-                    disabled={!formick.isValid}
+                    // disabled={!formick.isValid}
                     className={classes.buttomSend}
                     style={{
                       width: "100%",

@@ -268,6 +268,7 @@ const ReservationForm = (props) => {
   const validationSchema = Yup.object({
     contactName: Yup.string().max(10, "10 characters max").required("Required"),
     contactType: Yup.string().required("Required"),
+    title: Yup.string().max(15, "15 characters max").required("Required"),
     phone: Yup.string()
       .min(5, "That is not a valid phone number")
       .matches(phoneRegExp, "That is not a valid phone number"),
@@ -287,7 +288,7 @@ const ReservationForm = (props) => {
       birthday: "",
       date: "",
       description: "",
-      title: " ",
+      title: "",
     },
     validationSchema: validationSchema,
     onReset: {
@@ -302,6 +303,7 @@ const ReservationForm = (props) => {
       let reservation = null;
 
       if (inputs.block) {
+        console.log(formick.values);
         reservation = {
           title: formick.values.title,
           description: formick.values.description,
@@ -350,7 +352,7 @@ const ReservationForm = (props) => {
       }
     },
     validateOnChange: true,
-    isInitialValid: true,
+    isInitialValid: false,
   });
 
   const handleChangeViewButton = (action) => {
@@ -369,6 +371,8 @@ const ReservationForm = (props) => {
       props.history.replace("/contacts");
     }
   };
+
+  console.log(formick);
 
   return (
     <React.Fragment>
@@ -489,12 +493,13 @@ const ReservationForm = (props) => {
                     }}
                     onChange={formick.handleChange}
                     value={
-                      !inputs.block
-                        ? formick.values.birthday
-                        : format(
-                            new Date(formick.values.birthday),
-                            "yyyy-MM-dd"
-                          )
+                      formick.values.birthday.split("T")[0]
+                      // !inputs.block
+                      //   ? formick.values.birthday
+                      //   : format(
+                      //       new Date(formick.values.birthday),
+                      //       "yyyy-MM-dd"
+                      //     )
                     }
                     InputLabelProps={{
                       shrink: true,
@@ -533,6 +538,7 @@ const ReservationForm = (props) => {
                 <Grid container justify="center" item xs={12} sm={3}>
                   <TextField
                     className={classes.formControl}
+                    required
                     name="title"
                     variant="outlined"
                     label="Title"
@@ -595,7 +601,6 @@ const ReservationForm = (props) => {
           </Button> */}
               <Hidden xsDown>
                 <Button
-                  disabled={!formick.isValid}
                   className={classes.buttomSend}
                   type="submit"
                   onClick={formick.handleSubmit}
@@ -605,7 +610,7 @@ const ReservationForm = (props) => {
               </Hidden>
               <Hidden smUp>
                 <Button
-                  disabled={!formick.isValid}
+                  // disabled={!formick.isValid}
                   className={classes.buttomSend}
                   style={{
                     width: "100%",
