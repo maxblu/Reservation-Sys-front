@@ -15,25 +15,17 @@ import {
   Paper,
   Select,
   Typography,
-  useMediaQuery,
 } from "@material-ui/core";
+import { Favorite } from "@material-ui/icons";
+import Pagination from "@material-ui/lab/Pagination";
+
+import { formatDate } from "../../helpers/helpers";
+import axios from "../../axiosInstance";
+
 import StarRatingComponent from "react-star-rating-component";
 
-import axios from "../../axiosInstance";
-import { formatDate } from "../../helpers/helpers";
-
-import Spinner from "../../Components/Spinner/Spinner";
-import {
-  ArrowBack,
-  ArrowBackIos,
-  ArrowForward,
-  ArrowForwardIos,
-  ArrowRight,
-  Delete,
-  Favorite,
-} from "@material-ui/icons";
-import Pagination from "@material-ui/lab/Pagination";
 import SubBanner from "../../Components/SubBanner/SubBanner";
+import Spinner from "../../Components/Spinner/Spinner";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -50,14 +42,11 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     backgroundColor: "rgb(223, 223, 223)",
     marginBottom: theme.spacing(2),
-    // marginLeft:theme.spacing(2),
   },
   gridListItem: {
     width: "100%",
     backgroundColor: "#f7f7f7",
     marginBottom: theme.spacing(2),
-    // marginLeft:theme.spacing(2),
-    // marginRight:theme.spacing(2),
   },
   activeFavorite: {
     color: "red",
@@ -94,6 +83,19 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+/** 
+Reservcvations component where reservations list are displayed
+From there you can rating add favorite edit reservations. 
+
+
+reservations manage the states for the reservations
+loading for show the spinner on api calls
+currentOrder for the order selction option
+pageData is the  object that came from the api with the response
+have info for easy pagination on server side
+
+*/
+
 const Reservations = (props) => {
   const classes = useStyles();
 
@@ -111,16 +113,12 @@ const Reservations = (props) => {
     previousPage: null,
   });
 
-  console.log(pageData);
-  console.log(reservations);
-
   useEffect(() => {
     setLoading(true);
 
     axios
       .get("/Reservation")
       .then((res) => {
-        console.log(res.data);
         setLoading(false);
         setReservations(res.data.data);
         setPageData({
@@ -136,7 +134,6 @@ const Reservations = (props) => {
       })
       .catch((e) => {
         console.log(e);
-        // setLoading(false);
       });
   }, []);
 
@@ -170,8 +167,6 @@ const Reservations = (props) => {
   };
 
   const handlePagination = (e, page) => {
-    // console.log("", direct);
-
     setLoading(true);
     axios
       .get(`/Reservation/?pageNumber=${page}`)
@@ -192,7 +187,6 @@ const Reservations = (props) => {
       })
       .catch((e) => {
         console.log(e);
-        // setLoading(false);
       });
   };
 
@@ -212,9 +206,8 @@ const Reservations = (props) => {
       .put(`/Reservation/${reservations[index].id}`, reservationToSend)
       .then((res) => {
         setReservations(updatedData);
-        console.log("Change done!");
       })
-      .catch((er) => console.log("error"));
+      .catch((er) => console.log(er.response));
   };
 
   const handleRatingChange = (nextV, prevV, index) => {
@@ -244,7 +237,6 @@ const Reservations = (props) => {
     props.history.push("/reservations/create");
   };
 
-  console.log("Re render");
   return (
     <React.Fragment>
       <SubBanner
@@ -337,11 +329,6 @@ const Reservations = (props) => {
                         </Hidden>
                         <Grid item xs={5} sm={3} container justify="center">
                           <IconButton
-                            // className={
-                            //   reser.isFavorite
-                            //     ? classes.activeFavorite
-                            //     : classes.disableFavorite
-                            // }
                             onClick={(e) => handleFavoriteChange(e, index)}
                           >
                             <Typography
@@ -363,16 +350,7 @@ const Reservations = (props) => {
                             />
                           </IconButton>
                         </Grid>
-                        {/* 
-                        <Grid item xs={1} sm={3} container justify="flex-end">
-                          <IconButton
-                            size="small"
-                            className={classes.buttonDelete}
-                            onClick={(e) => handlerEdit(e, index)}
-                          >
-                            <Delete />
-                          </IconButton>
-                        </Grid> */}
+
                         <Grid item xs={2} sm={3} container justify="flex-end">
                           <Button
                             className={classes.buttonAction}
@@ -393,23 +371,6 @@ const Reservations = (props) => {
               justify="flex-start"
               className={classes.pagination}
             >
-              {/* <IconButton
-                disabled={pageData.pageNumber <= 1}
-                onClick={(e) => {
-                  handlePagination(e, false);
-                }}
-              >
-                <ArrowBackIos />
-              </IconButton>
-              <ListItemText primary={pageData.pageNumber} />
-              <IconButton
-                disabled={pageData.pageNumber >= pageData.totalPages}
-                onClick={(e) => {
-                  handlePagination(e, true);
-                }}
-              >
-                <ArrowForwardIos />
-              </IconButton> */}
               <Pagination
                 className={classes.pagination}
                 count={pageData.totalPages}
@@ -419,25 +380,6 @@ const Reservations = (props) => {
                 shape="rounded"
               />
             </Grid>
-
-            {/* <Grid
-              item
-              container
-              justify="space-around"
-              style={{
-                paddingBottom: "5%",
-                paddingTop: "5%",
-              }}
-            >
-              <Button
-                className={classes.buttonAction}
-                onClick={(e) => {
-                  props.history.push("/contacts");
-                }}
-              >
-                Contact List
-              </Button>
-            </Grid> */}
           </Grid>
         </Grid>
       </Paper>

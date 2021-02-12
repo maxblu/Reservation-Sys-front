@@ -11,8 +11,6 @@ import React from "react";
 const useStyles = makeStyles((theme) => ({
   subHeader: {
     width: "100%",
-
-    //  textAlign:"center"
   },
   subHeaderMovil: {
     width: "100%",

@@ -6,10 +6,8 @@ import {
   DialogTitle,
   FormControl,
   Grid,
-  Hidden,
   InputLabel,
   makeStyles,
-  Menu,
   MenuItem,
   Paper,
   Select,
@@ -19,7 +17,7 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { format } from "date-fns";
+
 import SubBanner from "../../Components/SubBanner/SubBanner";
 
 const useStyles = makeStyles((theme) => ({
@@ -60,6 +58,18 @@ const useStyles = makeStyles((theme) => ({
     width: "inherit",
   },
 }));
+
+/*
+Reservation edit is the form for managing update reservation.
+You get here on click on edit button on list reservations 
+You can only edit here the reservation if type a contact that exist 
+occur the same behaveor  that in reservation create form.
+if contact name exist complete all realted fields if not create a new one and added to the edited
+reservation. 
+You can also delete the current reservation selected to edit.
+
+
+*/
 
 const ReservationEdit = (props) => {
   const classes = useStyles();
@@ -187,14 +197,9 @@ const ReservationEdit = (props) => {
           .catch((err) => {
             console.log(err.response.data);
             console.log("Check server validation errors");
-
-            // console.log(resp);
           });
       }
     },
-
-    // validateOnChange: true,
-    // isInitialValid: true,
   });
 
   const updateReservation = (reservationUpd) => {
@@ -206,17 +211,11 @@ const ReservationEdit = (props) => {
       .then((resp) => {
         formick.setValues({ ...formick.values, loading: false });
 
-        // setInputs({ ...inputs, loading: false, errors: false });
-        // setOpen(true);
         props.history.push("/Reservations");
       })
       .catch((e) => {
         formick.setValues({ ...formick.values, loading: false });
         console.log(e.response);
-        // setInputs({ ...inputs, loading: false, errors: true });
-        // setOpen(true);
-
-        console.log("Check server validation errors at reservation update");
       });
   };
 
@@ -381,17 +380,7 @@ const ReservationEdit = (props) => {
                       });
                     }}
                     onChange={formick.handleChange}
-                    value={
-                      // formick.values.birthday
-                      formick.values.birthday.split("T")[0]
-                      // formick.values.block
-                      //   ? formick.values.birthday &&
-                      //     format(
-                      //       new Date(formick.values.birthday),
-                      //       "yyyy-MM-dd"
-                      //     )
-                      //   : formick.values.birthday
-                    }
+                    value={formick.values.birthday.split("T")[0]}
                     InputLabelProps={{
                       shrink: true,
                     }}
@@ -448,9 +437,6 @@ const ReservationEdit = (props) => {
                     editor={ClassicEditor}
                     data={reservation.description}
                     onReady={(editor) => {
-                      //   editor.setData(reservation.description);
-
-                      // You can store the "editor" and use when it is needed.
                       console.log("Editor is ready to use!", editor);
                     }}
                     onChange={(event, editor) => {
@@ -459,29 +445,20 @@ const ReservationEdit = (props) => {
                         ...formick.values,
                         description: data,
                       });
-                      //   setInputs({ ...inputs, description: data });
-                      // console.log( { event, editor, data } );
                     }}
                     onBlur={(event, editor) => {
                       console.log("Blur.", editor);
                     }}
                     onFocus={(event, editor) => {
-                      //   editor.setData(reservation.description);
                       console.log("Focus.", editor);
                     }}
                   ></CKEditor>
-                  {/* </Paper> */}
                 </Grid>
-                {/* <Hidden xsDown> */}
-                <Button
-                  // disabled={!formick.isValid}
-                  className={classes.buttomSend}
-                  type="submit"
-                >
+
+                <Button className={classes.buttomSend} type="submit">
                   Edit
                 </Button>
-                {/* </Hidden> */}
-                {/* <Hidden xsDown> */}
+
                 <Button
                   className={classes.buttomSend}
                   onClick={() => setDel(true)}
@@ -519,19 +496,6 @@ const ReservationEdit = (props) => {
                     </Grid>
                   </Dialog>
                 )}
-                {/* </Hidden> */}
-                {/* <Hidden smUp>
-                  <Button
-                    disabled={!formick.isValid}
-                    className={classes.buttomSend}
-                    style={{
-                      width: "100%",
-                    }}
-                    type="submit"
-                  >
-                    Send
-                  </Button>
-                </Hidden> */}
               </Grid>
             </form>
           )}

@@ -5,9 +5,7 @@ import {
   FormControl,
   Grid,
   Hidden,
-  IconButton,
   InputLabel,
-  ListItemText,
   makeStyles,
   MenuItem,
   Paper,
@@ -20,12 +18,12 @@ import MuiAlert from "@material-ui/lab/Alert";
 import "react-datepicker/dist/react-datepicker.css";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
-import { Form, useFormik } from "formik";
+import { useFormik } from "formik";
 import * as Yup from "yup";
 
 import axios from "../../axiosInstance";
 import Spinner from "../../Components/Spinner/Spinner";
-import { format } from "date-fns";
+
 import SubBannerCreate from "../../Components/SubBannerCreate/SubBannerCreate";
 
 function Alert(props) {
@@ -42,7 +40,6 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(1),
   },
   editor: {
-    // height: "50%",
     width: "99%",
     marginLeft: ".5%",
   },
@@ -73,6 +70,17 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+/**
+ * Reservation form where you create new reservations and contacts
+ * if they not exist. Manage forma validation with formick and server side
+ * for the case that  contactName exist auto fill the realted fill that the database bring
+ * Have to action beside create
+ * Contant List and Edit Contact
+ * In a movil this button are sustituted by one that display a top drower for the same actions.
+ * The action of edit is only avalidable if you select a contact that is already in the databse
+ * The contact list lead you to the List of all contacts
+ */
+
 const ReservationForm = (props) => {
   const [inputs, setInputs] = useState({
     contactName: "",
@@ -89,38 +97,7 @@ const ReservationForm = (props) => {
   });
   const [allContactTypes, setAllContactTypes] = useState([]);
   const [loading, setLoading] = useState(false);
-  // const [errors, setErrors] = useState({
-  //   contactName: {
-  //     touch: false,
-  //     error: false,
-  //     eroorMsg: "",
-  //   },
-  //   contactType: {
-  //     touch: false,
-  //     error: false,
-  //     eroorMsg: "",
-  //   },
-  //   phone: {
-  //     touch: false,
-  //     error: false,
-  //     eroorMsg: "",
-  //   },
-  //   birthDate: {
-  //     touch: false,
-  //     error: false,
-  //     eroorMsg: "",
-  //   },
-  //   date: {
-  //     touch: false,
-  //     error: false,
-  //     eroorMsg: "",
-  //   },
-  //   title: {
-  //     touch: false,
-  //     error: false,
-  //     eroorMsg: "",
-  //   },
-  // });
+
   const [open, setOpen] = React.useState(false);
 
   const classes = useStyles();
@@ -128,19 +105,6 @@ const ReservationForm = (props) => {
   const handleOpenSnack = () => {
     setOpen(true);
   };
-
-  const ExampleCustomInput = ({ value, onClick, tipo, block }) => (
-    <TextField
-      required
-      error
-      helperText
-      label={tipo}
-      variant="outlined"
-      value={value}
-      disabled={block}
-      onClick={onClick}
-    ></TextField>
-  );
 
   useEffect(() => {
     axios
@@ -153,57 +117,6 @@ const ReservationForm = (props) => {
       });
   }, []);
 
-  // const handleSave = (values) => {
-  //   let reservation = null;
-
-  //   if (inputs.block) {
-  //     reservation = {
-  //       title: formick.,
-  //       description: inputs.description,
-  //       contactId: inputs.contactId,
-  //       date: inputs.date,
-  //       creationDate: new Date(),
-  //     };
-
-  //     setInputs({ ...inputs, loading: true });
-  //     saveReservation(reservation);
-  //   } else {
-  //     let current = null;
-  //     allContactTypes.forEach((el) => {
-  //       if (el.name === inputs.contactType) {
-  //         current = el.id;
-  //       }
-  //     });
-
-  //     const contact = {
-  //       name: inputs.contactName,
-  //       phone: inputs.phone,
-  //       typeId: current,
-  //       birthDate: inputs.birthDate,
-  //     };
-  //     console.log(contact);
-
-  //     setInputs({ ...inputs, loading: true });
-  //     axios
-  //       .post("/Contact", contact)
-  //       .then((resp) => {
-  //         const reservation = {
-  //           title: inputs.title,
-  //           description: inputs.description,
-  //           contactId: resp.data.id,
-  //           date: inputs.date,
-  //           creationDate: new Date(),
-  //         };
-
-  //         saveReservation(reservation);
-  //       })
-  //       .catch((err) => {
-  //         console.log(err.response.data);
-  //         // console.log(resp);
-  //       });
-  //   }
-  // };
-
   const saveReservation = (reservation) => {
     axios
       .post("/Reservation", reservation)
@@ -215,13 +128,10 @@ const ReservationForm = (props) => {
       .catch((e) => {
         setInputs({ ...inputs, loading: false, errors: true });
         setOpen(true);
-
-        // console.log("Check server validation errors");
       });
   };
 
   const handleChangeContactName = (e) => {
-    // formick.setValues({...formick.values,})
     setInputs({
       ...inputs,
 
@@ -347,7 +257,6 @@ const ReservationForm = (props) => {
           })
           .catch((err) => {
             console.log(err.response.data);
-            // console.log(resp);
           });
       }
     },
@@ -388,7 +297,6 @@ const ReservationForm = (props) => {
             {loading ? (
               <Spinner />
             ) : (
-              // <Form>
               <Grid item xs={12} sm={12} container justify="center">
                 <Grid container item xs={12} sm={3} justify="flex-start">
                   <TextField
@@ -398,10 +306,6 @@ const ReservationForm = (props) => {
                     variant="outlined"
                     name="contactName"
                     label="Contact Name"
-                    // error={true}
-                    // value={fo}
-                    // helperText={"fgaf"}
-                    // onChange={handleChange}
                     onBlur={() => {
                       formick.setTouched({
                         ...formick.touched,
@@ -428,8 +332,6 @@ const ReservationForm = (props) => {
                       required
                       id="contactType"
                       name="contactType"
-                      // value={inputs.contactType}
-                      // onChange={handleChange}
                       variant="outlined"
                       disabled={inputs.block}
                       value={formick.values.contactType}
@@ -462,8 +364,6 @@ const ReservationForm = (props) => {
                     variant="outlined"
                     label="Phone"
                     disabled={inputs.block}
-                    // value={inputs.phone}
-                    // onChange={handleChange}
                     onBlur={() => {
                       formick.setTouched({ ...formick.touched, phone: true });
                     }}
@@ -492,15 +392,7 @@ const ReservationForm = (props) => {
                       });
                     }}
                     onChange={formick.handleChange}
-                    value={
-                      formick.values.birthday.split("T")[0]
-                      // !inputs.block
-                      //   ? formick.values.birthday
-                      //   : format(
-                      //       new Date(formick.values.birthday),
-                      //       "yyyy-MM-dd"
-                      //     )
-                    }
+                    value={formick.values.birthday.split("T")[0]}
                     InputLabelProps={{
                       shrink: true,
                     }}
@@ -554,11 +446,8 @@ const ReservationForm = (props) => {
                   />
                 </Grid>
               </Grid>
-              // </Form>
             )}
             <Grid item className={classes.editor} xs={12}>
-              {/* <Paper > */}
-
               <CKEditor
                 editor={ClassicEditor}
                 onReady={(editor) => {
@@ -569,7 +458,6 @@ const ReservationForm = (props) => {
                   const data = editor.getData();
                   formick.setValues({ ...formick.values, description: data });
                   setInputs({ ...inputs, description: data });
-                  // console.log( { event, editor, data } );
                 }}
                 onBlur={(event, editor) => {
                   console.log("Blur.", editor);
@@ -578,7 +466,6 @@ const ReservationForm = (props) => {
                   console.log("Focus.", editor);
                 }}
               ></CKEditor>
-              {/* </Paper> */}
             </Grid>
             <Grid item xs={10} md={8}>
               <Snackbar open={open} autoHideDuration={5000}>
@@ -596,9 +483,6 @@ const ReservationForm = (props) => {
               alignContent="space-around"
               xs={12}
             >
-              {/* <Button className={classes.buttomSend} onClick={handleSave}>
-            Send
-          </Button> */}
               <Hidden xsDown>
                 <Button
                   className={classes.buttomSend}
@@ -610,7 +494,6 @@ const ReservationForm = (props) => {
               </Hidden>
               <Hidden smUp>
                 <Button
-                  // disabled={!formick.isValid}
                   className={classes.buttomSend}
                   style={{
                     width: "100%",
