@@ -12,6 +12,6 @@ Later to start server
 
 ## Aditional Requeriments
 
-Local apnet. core api must be running you cant find it [here](https://github.com/maxblu/ReservationSys.git)
+Local asp.net core api must be running you cant find it [here](https://github.com/maxblu/ReservationSys.git)
 Default direction https://localhost:5001/
 
