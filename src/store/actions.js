@@ -16,6 +16,8 @@ export const SET_LOADING = "SET_LOADING";
 export const SUCCESS = "SUCCESS";
 export const FAIL = "FAIL";
 
+export const SET_CONTACTTYPES = "GET_CONTACTTYPES";
+
 export const ADD_ING = "ADD_ING";
 export const SUB_ING = "SUB_ING";
 
@@ -23,6 +25,52 @@ export const AUTH_START = "AUTH_START";
 export const AUTH_SUCCESS = "AUTH_SUCCESS";
 export const AUTH_FAIL = "AUTH_FAIL";
 export const AUTH_LOGOUT = "AUTH_LOGOUT";
+
+export const setLoading = (value) => {
+  return {
+    type: SET_LOADING,
+    value: value,
+  };
+};
+
+export const setContactTypes = (contactTypes, name) => {
+  return {
+    type: SET_CONTACTTYPES,
+    contactTypes: contactTypes,
+    currentContactTypeName: name,
+  };
+};
+
+export const setFail = (response) => {
+  return {
+    type: FAIL,
+    errors: response,
+  };
+};
+
+export const getContactTypes = (id) => {
+  return (dispatch) => {
+    dispatch(setLoading(true));
+    axios
+      .get("/contactType")
+      .then((resp) => {
+        if (id) {
+          let current = null;
+          resp.data.forEach((el) => {
+            if (el.id === id) {
+              current = el.name;
+            }
+            dispatch(setContactTypes(resp.data, current));
+          });
+        } else {
+          dispatch(setContactTypes(resp.data, null));
+        }
+      })
+      .catch((e) => {
+        dispatch(setFail(e.response));
+      });
+  };
+};
 
 // export const authCheckSate = () => {
 //   return (dispatch) => {
