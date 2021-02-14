@@ -125,6 +125,7 @@ const ReservationEdit = (props) => {
   const validationSchema = Yup.object({
     contactName: Yup.string().max(10, "10 characters max").required("Required"),
     contactType: Yup.string().required("Required"),
+    title: Yup.string().max(15, "15 characters max").required("Required"),
     phone: Yup.string()
       .min(5, "That is not a valid phone number")
       .matches(phoneRegExp, "That is not a valid phone number"),
@@ -419,6 +420,7 @@ const ReservationEdit = (props) => {
                 <Grid item xs={12} container sm={5} justify="center">
                   <TextField
                     className={classes.formControl}
+                    required
                     name="title"
                     variant="outlined"
                     label="Title"
