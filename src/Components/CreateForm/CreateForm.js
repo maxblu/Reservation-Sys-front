@@ -6,6 +6,19 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 
 import * as actions from "../../store/actions";
+import {
+  Button,
+  Dialog,
+  DialogTitle,
+  FormControl,
+  Grid,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+} from "@material-ui/core";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import { ClassicEditor } from "@ckeditor/ckeditor5-build-classic";
 
 const CreateForm = (props) => {
   const contactTypes = useSelector((state) => state.contactTypes, shallowEqual);
@@ -118,7 +131,7 @@ const CreateForm = (props) => {
                 formick.touched.contactType && formick.errors.contactType
               }
             >
-              {allContactTypes.map((elm) => {
+              {contactTypes.map((elm) => {
                 return <MenuItem value={elm.name}>{elm.name}</MenuItem>;
               })}
             </Select>
